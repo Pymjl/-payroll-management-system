@@ -1,4 +1,4 @@
-package cuit.pymjl.core;
+package cuit.pymjl.core.servlet;
 
 import java.io.*;
 import javax.servlet.http.*;
