@@ -21,12 +21,6 @@
                 <property name="url" value="${url}"/>
                 <property name="username" value="${username}}"/>
                 <property name="password" value="${password}"/>
-                <property name="initialSize" value="${initialSize}"/>
-                <property name="maxActive" value="${maxActive}"/>
-                <property name="minIdle" value="${minIdle}"/>
-                <property name="maxWait" value="${maxWait}"/>
-                <property name="maxOpenPreparedStatements" value="20"/>
-                <property name="filters" value="${filters}"/>
             </dataSource>
         </environment>
     </environments>
