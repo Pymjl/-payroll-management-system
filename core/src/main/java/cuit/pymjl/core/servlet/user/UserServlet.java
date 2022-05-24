@@ -3,7 +3,6 @@ package cuit.pymjl.core.servlet.user;
 
 import cuit.pymjl.core.entity.user.User;
 import cuit.pymjl.core.mapper.UserMapper;
-import cuit.pymjl.core.util.DruidUtils;
 import cuit.pymjl.core.util.MybatisUtil;
 
 import javax.servlet.*;
@@ -11,7 +10,6 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -24,7 +22,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UserMapper userMapper = MybatisUtil.openSession().getMapper(UserMapper.class);
-        List<User> users = userMapper.queryUsers();
+        List<User> users = userMapper.queryUsers(1, 5);
         response.setContentType("text/html;charset=utf-8");
         PrintWriter writer = response.getWriter();
         for (User user : users) {

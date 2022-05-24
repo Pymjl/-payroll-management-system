@@ -1,7 +1,10 @@
 package cuit.pymjl.core;
 
+import cuit.pymjl.core.entity.user.User;
 import cuit.pymjl.core.mapper.UserMapper;
 import cuit.pymjl.core.util.MybatisUtil;
+
+import java.util.List;
 
 /**
  * @author Pymjl
@@ -11,6 +14,6 @@ import cuit.pymjl.core.util.MybatisUtil;
 public class TestDruid {
     public static void main(String[] args) {
         UserMapper mapper = MybatisUtil.openSession().getMapper(UserMapper.class);
-        mapper.queryUsers().forEach(System.out::println);
+        List<User> users = mapper.queryUsers(1, 5);
     }
 }
