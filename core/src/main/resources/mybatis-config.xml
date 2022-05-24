@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <properties resource="druid.properties"/>
+
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+
+    <typeAliases>
+        <package name="cuit.pymjl.core.entity"/>
+    </typeAliases>
+
+    <environments default="work">
+        <environment id="work">
+            <transactionManager type="JDBC"/>
+            <dataSource type="cuit.pymjl.core.config.DruidDataSourceFactory">
+                <property name="driver" value="${driverClassName}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}}"/>
+                <property name="password" value="${password}"/>
+                <property name="initialSize" value="${initialSize}"/>
+                <property name="maxActive" value="${maxActive}"/>
+                <property name="minIdle" value="${minIdle}"/>
+                <property name="maxWait" value="${maxWait}"/>
+                <property name="maxOpenPreparedStatements" value="20"/>
+                <property name="filters" value="${filters}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <package name="cuit.pymjl.core.mapper"/>
+    </mappers>
+</configuration>

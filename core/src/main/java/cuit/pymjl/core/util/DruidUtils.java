@@ -1,6 +1,5 @@
 package cuit.pymjl.core.util;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -13,13 +12,13 @@ import com.alibaba.druid.pool.DruidDataSourceFactory;
  * @version 1.0
  * @date 2022/5/23 0:22
  **/
-public class DruidUtil {
+public class DruidUtils {
     static DruidDataSource dataSource;
 
     static {
         Properties prop = new Properties();
         try {
-            prop.load(DruidUtil.class.getClassLoader().getResourceAsStream("druid.properties"));
+            prop.load(DruidUtils.class.getClassLoader().getResourceAsStream("druid.properties"));
             dataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(prop);
         } catch (Exception e) {
             e.printStackTrace();
