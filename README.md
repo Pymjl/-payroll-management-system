@@ -20,7 +20,7 @@ JSP课设：学校内部工资管理系统
 |   依赖管理   |             Maven              |
 |     Json     |            Jackson             |
 | 数据库连接池 |        Druid（德鲁伊）         |
-|   DAO框架    |          Mybatis Plus          |
+|   DAO框架    |            Mybatis             |
 |    NoSql     |             redis              |
 
 ## 3.需求分析
