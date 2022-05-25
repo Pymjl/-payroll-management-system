@@ -7,15 +7,21 @@
         <result column="password" property="password"/>
         <result column="gender" property="gender"/>
         <result column="age" property="age"/>
+        <result column="account" property="account"/>
+        <result column="identity" property="identity"/>
+        <result column="phone" property="phone"/>
         <result column="nickname" property="nickname"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
     <insert id="addUser" parameterType="cuit.pymjl.core.entity.user.User">
-        insert into t_user(username, password, nickname, gender, age, create_time, update_time)
-        values (#{username}, #{password}, #{nickname}, #{gender}, #{age}, now(), now())
+        insert into t_user(username, password, nickname, gender, age, phone, account, identity, create_time,
+                           update_time)
+        values (#{username}, #{password}, #{nickname}, #{gender}, #{age}, #{phone}, #{account}, #{identity}, now(),
+                now())
     </insert>
+
     <select id="queryUsers" resultMap="userMap">
         select *
         from t_user
