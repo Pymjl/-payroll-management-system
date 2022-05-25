@@ -19,10 +19,8 @@ public class DruidDataSourceFactory implements DataSourceFactory {
     @Override
     public DataSource getDataSource() {
         DruidDataSource dds = new DruidDataSource();
-        Properties prop = new Properties();
         try {
-            prop.load(DruidUtils.class.getClassLoader().getResourceAsStream("druid.properties"));
-            dds = (DruidDataSource) com.alibaba.druid.pool.DruidDataSourceFactory.createDataSource(prop);
+            dds = (DruidDataSource) com.alibaba.druid.pool.DruidDataSourceFactory.createDataSource(props);
         } catch (Exception e) {
             e.printStackTrace();
         }
