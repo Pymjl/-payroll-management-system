@@ -1,6 +1,7 @@
 package cuit.pymjl.core;
 
 import cuit.pymjl.core.util.JwtUtils;
+import cuit.pymjl.core.util.PasswordUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -15,5 +16,10 @@ public class JWT {
     void testJwt() {
         System.out.println(JwtUtils.generateToken(1L, "pymjl"));
         log.info("成功");
+    }
+
+    @Test
+    void testPassword() {
+        System.out.println(PasswordUtils.encrypt("123456"));
     }
 }
