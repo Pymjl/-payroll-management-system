@@ -1,9 +1,11 @@
 package cuit.pymjl.core;
 
+import cn.hutool.db.nosql.redis.RedisDS;
 import cuit.pymjl.core.util.JwtUtils;
 import cuit.pymjl.core.util.PasswordUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import redis.clients.jedis.Jedis;
 
 /**
  * @author Pymjl
@@ -21,5 +23,12 @@ public class JWT {
     @Test
     void testPassword() {
         System.out.println(PasswordUtils.encrypt("123456"));
+    }
+
+    @Test
+    void testJedis() {
+        Jedis jedis = RedisDS.create().getJedis();
+        jedis.setex("k1", 60, "v1");
+        System.out.println(jedis.get("k1"));
     }
 }
