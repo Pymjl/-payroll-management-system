@@ -1,7 +1,6 @@
 package cuit.pymjl.core.config;
 
 
-import java.sql.SQLException;
 import java.util.Properties;
 import javax.sql.DataSource;
 
