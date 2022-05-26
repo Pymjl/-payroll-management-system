@@ -1,9 +1,8 @@
 package cuit.pymjl.core.service;
 
 import cuit.pymjl.core.entity.user.dto.UserDTO;
-import cuit.pymjl.core.mapper.UserMapper;
-import cuit.pymjl.core.service.impl.UserServiceImpl;
-import cuit.pymjl.core.util.MybatisUtil;
+import cuit.pymjl.core.service.user.impl.UserServiceImpl;
+import cuit.pymjl.core.service.user.UserService;
 import org.junit.jupiter.api.Test;
 
 /**

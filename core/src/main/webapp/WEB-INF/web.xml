@@ -33,6 +33,20 @@
         </init-param>
     </servlet>
 
+    <!--异常处理-->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/notFound</location>
+    </error-page>
+    <error-page>
+        <exception-type>cuit.pymjl.core.exception.AppException</exception-type>
+        <location>/appException</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/exception</location>
+    </error-page>
+
     <servlet-mapping>
         <servlet-name>StatViewServlet</servlet-name>
         <url-pattern>/druid/*</url-pattern>

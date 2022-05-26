@@ -1,13 +1,14 @@
-package cuit.pymjl.core.service.impl;
+package cuit.pymjl.core.service.user.impl;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Validator;
 import cuit.pymjl.core.constant.IdentityEnum;
 import cuit.pymjl.core.entity.user.User;
 import cuit.pymjl.core.entity.user.dto.UserDTO;
-import cuit.pymjl.core.mapper.UserMapper;
-import cuit.pymjl.core.service.UserService;
+import cuit.pymjl.core.mapper.user.UserMapper;
+import cuit.pymjl.core.service.user.UserService;
 import cuit.pymjl.core.util.JedisUtils;
 import cuit.pymjl.core.util.MybatisUtil;
 import cuit.pymjl.core.util.PasswordUtils;
@@ -76,5 +77,14 @@ public class UserServiceImpl implements UserService {
         JedisUtils.set(key, code, EXPIRATION);
         log.info("验证码生成成功");
         return captcha;
+    }
+
+    @Override
+    public Boolean getEmailCode(String username) {
+        if (!Validator.isEmail(username)) {
+            throw new RuntimeException("用户名格式错误，用户名应为邮箱");
+        }
+
+        return null;
     }
 }

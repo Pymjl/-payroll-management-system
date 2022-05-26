@@ -2,7 +2,7 @@ package cuit.pymjl.core;
 
 import com.github.pagehelper.Page;
 import cuit.pymjl.core.entity.user.User;
-import cuit.pymjl.core.mapper.UserMapper;
+import cuit.pymjl.core.mapper.user.UserMapper;
 import cuit.pymjl.core.result.PageResult;
 import cuit.pymjl.core.util.JsonUtils;
 import cuit.pymjl.core.util.MybatisUtil;

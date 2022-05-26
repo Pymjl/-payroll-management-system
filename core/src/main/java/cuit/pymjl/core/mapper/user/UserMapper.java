@@ -1,4 +1,4 @@
-package cuit.pymjl.core.mapper;
+package cuit.pymjl.core.mapper.user;
 
 import com.github.pagehelper.Page;
 import cuit.pymjl.core.entity.user.User;

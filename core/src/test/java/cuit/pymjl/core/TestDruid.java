@@ -1,7 +1,7 @@
 package cuit.pymjl.core;
 
 import cuit.pymjl.core.entity.user.User;
-import cuit.pymjl.core.mapper.UserMapper;
+import cuit.pymjl.core.mapper.user.UserMapper;
 import cuit.pymjl.core.util.MybatisUtil;
 
 import java.util.List;

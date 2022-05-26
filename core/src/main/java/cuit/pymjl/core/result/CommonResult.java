@@ -1,5 +1,7 @@
 package cuit.pymjl.core.result;
 
+import java.io.Serializable;
+
 /**
  * 共同结果
  *
@@ -7,7 +9,10 @@ package cuit.pymjl.core.result;
  * @version 1.0
  * @date 2022/5/24 20:50
  **/
-public class CommonResult {
+public class CommonResult implements Serializable {
+
+    private static final long serialVersionUID = -10899714971680341L;
+
     /**
      * 数据
      */

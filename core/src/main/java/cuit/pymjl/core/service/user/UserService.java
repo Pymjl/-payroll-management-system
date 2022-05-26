@@ -1,4 +1,4 @@
-package cuit.pymjl.core.service;
+package cuit.pymjl.core.service.user;
 
 import cn.hutool.captcha.CircleCaptcha;
 import cuit.pymjl.core.entity.user.dto.UserDTO;
@@ -24,4 +24,12 @@ public interface UserService {
      * @return {@code CircleCaptcha}
      */
     CircleCaptcha getImageVerifyCode(String key);
+
+    /**
+     * 获得电子邮件代码
+     *
+     * @param username 用户名
+     * @return {@code Boolean}
+     */
+    Boolean getEmailCode(String username);
 }

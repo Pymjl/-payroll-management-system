@@ -1,5 +1,6 @@
 package cuit.pymjl.core;
 
+import cn.hutool.core.lang.Validator;
 import cuit.pymjl.core.entity.user.User;
 import cuit.pymjl.core.result.R;
 import cuit.pymjl.core.util.JsonUtils;
@@ -33,5 +34,15 @@ public class JsonTest {
         map.put("pmhl", 21312312);
         list.add(map);
         System.out.println(R.success(list));
+    }
+
+    @Test
+    void testHutool() {
+        System.out.println(Validator.isEmail("pymjl@qq."));
+    }
+
+    @Test
+    void testJson01() {
+        System.out.println(R.fail("发生未知错误"));
     }
 }
