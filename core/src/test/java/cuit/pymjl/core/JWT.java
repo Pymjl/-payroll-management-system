@@ -1,7 +1,13 @@
 package cuit.pymjl.core;
 
 import cn.hutool.db.nosql.redis.RedisDS;
+import com.github.pagehelper.Page;
+import cuit.pymjl.core.entity.user.User;
+import cuit.pymjl.core.mapper.user.UserMapper;
+import cuit.pymjl.core.result.PageResult;
+import cuit.pymjl.core.util.JsonUtils;
 import cuit.pymjl.core.util.JwtUtils;
+import cuit.pymjl.core.util.MybatisUtil;
 import cuit.pymjl.core.util.PasswordUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -27,8 +33,8 @@ public class JWT {
 
     @Test
     void testJedis() {
-        Jedis jedis = RedisDS.create().getJedis();
-        jedis.setex("k1", 60, "v1");
-        System.out.println(jedis.get("k1"));
+        UserMapper userMapper = MybatisUtil.openSession().getMapper(UserMapper.class);
+        Page<User> users = userMapper.queryUsers(1, 5);
+        System.out.println(JsonUtils.toString(new PageResult<>(users)));
     }
 }

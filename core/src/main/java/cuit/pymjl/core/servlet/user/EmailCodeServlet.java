@@ -11,6 +11,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Pymjl
@@ -29,6 +31,7 @@ public class EmailCodeServlet extends HttpServlet {
         }
         UserService userService = SingletonFactory.getInstance(UserServiceImpl.class);
         userService.getEmailCode(username, key, code);
+        List<String> list = new ArrayList<>();
         response.getWriter().println(R.success());
     }
 }

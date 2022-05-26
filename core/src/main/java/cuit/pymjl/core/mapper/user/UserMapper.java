@@ -2,7 +2,6 @@ package cuit.pymjl.core.mapper.user;
 
 import com.github.pagehelper.Page;
 import cuit.pymjl.core.entity.user.User;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.List;
  * @version 1.0
  * @date 2022/5/24 17:01
  **/
-@Mapper
 public interface UserMapper {
     /**
      * 查询用户
