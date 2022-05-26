@@ -4,15 +4,21 @@ import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Validator;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.mail.MailUtil;
 import cuit.pymjl.core.constant.IdentityEnum;
+import cuit.pymjl.core.constant.MailEnum;
 import cuit.pymjl.core.entity.user.User;
 import cuit.pymjl.core.entity.user.dto.UserDTO;
+import cuit.pymjl.core.exception.AppException;
 import cuit.pymjl.core.mapper.user.UserMapper;
 import cuit.pymjl.core.service.user.UserService;
 import cuit.pymjl.core.util.JedisUtils;
 import cuit.pymjl.core.util.MybatisUtil;
 import cuit.pymjl.core.util.PasswordUtils;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Random;
 
 /**
  * @author Pymjl
@@ -57,15 +63,6 @@ public class UserServiceImpl implements UserService {
     private static final int VERIFY_CODE_HEIGHT = 100;
 
     @Override
-    public Boolean register(UserDTO userDTO) {
-        User user = BeanUtil.copyProperties(userDTO, User.class);
-        user.setPassword(PasswordUtils.encrypt(user.getPassword()));
-        user.setIdentity(IdentityEnum.USER.getIdentity());
-        int i = userMapper.addUser(user);
-        return i == 1;
-    }
-
-    @Override
     public CircleCaptcha getImageVerifyCode(String key) {
         log.info("开始生成验证码.........");
         //定义图形验证码的长、宽、验证码字符数、干扰元素个数
@@ -80,11 +77,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean getEmailCode(String username) {
+    public void getEmailCode(String username, String key, String code) {
         if (!Validator.isEmail(username)) {
-            throw new RuntimeException("用户名格式错误，用户名应为邮箱");
+            throw new AppException("用户名格式错误，用户名应为邮箱");
         }
+        String imageCode = (String) JedisUtils.get(key);
+        JedisUtils.del(key);
+        if (StrUtil.isBlank(imageCode) || !imageCode.equals(code)) {
+            throw new AppException("图片验证码错误,请稍后重试");
+        }
+        log.info("开始生成验证码.......");
+        String emailCode = getRandomString(VERIFY_CODE_LENGTH);
+        log.info("验证码生成成功==>[{}]", code);
+        MailUtil.send(username, MailEnum.MAIL_SUBJECT_VERIFY_CODE.getMessage(),
+                MailEnum.getVerifyMailMessage(emailCode), false);
+        JedisUtils.set(username, code, EXPIRATION);
+    }
 
-        return null;
+    /**
+     * 得到随机字符串
+     *
+     * @param length 长度
+     * @return {@code String}
+     */
+    @SuppressWarnings("all")
+    private String getRandomString(int length) {
+        String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            int number = random.nextInt(62);
+            sb.append(str.charAt(number));
+        }
+        return sb.toString();
     }
 }

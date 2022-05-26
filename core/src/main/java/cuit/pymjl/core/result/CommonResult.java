@@ -9,14 +9,14 @@ import java.io.Serializable;
  * @version 1.0
  * @date 2022/5/24 20:50
  **/
-public class CommonResult implements Serializable {
+public class CommonResult<T> implements Serializable {
 
     private static final long serialVersionUID = -10899714971680341L;
 
     /**
      * 数据
      */
-    private String data;
+    private T data;
 
     /**
      * 状态
@@ -31,7 +31,7 @@ public class CommonResult implements Serializable {
     public CommonResult() {
     }
 
-    public CommonResult(String data, Boolean succeed, String message) {
+    public CommonResult(T data, Boolean succeed, String message) {
         this.data = data;
         this.succeed = succeed;
         this.message = message;
@@ -43,10 +43,38 @@ public class CommonResult implements Serializable {
         this.message = message;
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public Boolean getSucceed() {
+        return succeed;
+    }
+
+    public void setSucceed(Boolean succeed) {
+        this.succeed = succeed;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @Override
     public String toString() {
         return "CommonResult{" +
-                "data='" + data + '\'' +
+                "data=" + data +
                 ", succeed=" + succeed +
                 ", message='" + message + '\'' +
                 '}';

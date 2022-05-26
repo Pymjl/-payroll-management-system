@@ -18,4 +18,12 @@ public class JedisUtils {
     public static void set(String key, String value, long expire) {
         CLIENT.setex(key, expire, value);
     }
+
+    public static Object get(String key) {
+        return CLIENT.get(key);
+    }
+
+    public static void del(String key) {
+        CLIENT.del(key);
+    }
 }

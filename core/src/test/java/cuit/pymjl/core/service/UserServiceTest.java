@@ -1,5 +1,6 @@
 package cuit.pymjl.core.service;
 
+import cn.hutool.captcha.CircleCaptcha;
 import cuit.pymjl.core.entity.user.dto.UserDTO;
 import cuit.pymjl.core.service.user.impl.UserServiceImpl;
 import cuit.pymjl.core.service.user.UserService;
@@ -14,15 +15,9 @@ public class UserServiceTest {
     UserService userService = new UserServiceImpl();
 
     @Test
-    void register() {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setAccount("123435345435435341231");
-        userDTO.setUsername("123@qq.com");
-        userDTO.setAge(20);
-        userDTO.setGender(1);
-        userDTO.setNickname("pymjl");
-        userDTO.setPassword("123456");
-        userDTO.setPhone("19136310161");
-        System.out.println(userService.register(userDTO));
+    void getImageCode() {
+        CircleCaptcha code = userService.getImageVerifyCode("sd");
+        System.out.println(code.getCode());
+        userService.getImageVerifyCode("sd");
     }
 }

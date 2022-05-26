@@ -16,8 +16,8 @@ public class R {
      * @param message 消息
      * @return {@code CommonResult}
      */
-    public static <T> CommonResult success(T data, String message) {
-        return new CommonResult(JsonUtils.toString(data), true, message);
+    public static <T> String success(T data, String message) {
+        return JsonUtils.toString(new CommonResult(data, true, message));
     }
 
     /**
@@ -26,8 +26,8 @@ public class R {
      * @param data 数据
      * @return {@code CommonResult}
      */
-    public static <T> CommonResult success(T data) {
-        return new CommonResult(JsonUtils.toString(data), true, "成功");
+    public static <T> String success(T data) {
+        return JsonUtils.toString(new CommonResult(data, true, "成功"));
     }
 
     /**
@@ -35,8 +35,8 @@ public class R {
      *
      * @return {@code CommonResult}
      */
-    public static CommonResult success() {
-        return new CommonResult(true, "成功");
+    public static String success() {
+        return JsonUtils.toString(new CommonResult(true, "成功"));
     }
 
     /**
@@ -45,8 +45,8 @@ public class R {
      * @param message 消息
      * @return {@code CommonResult}
      */
-    public static CommonResult fail(String message) {
-        return new CommonResult(false, message);
+    public static String fail(String message) {
+        return JsonUtils.toString(new CommonResult(false, message));
     }
 
     /**
@@ -54,7 +54,7 @@ public class R {
      *
      * @return {@code CommonResult}
      */
-    public static CommonResult fail() {
-        return new CommonResult(false, "失败");
+    public static String fail() {
+        return JsonUtils.toString(new CommonResult(false, "失败"));
     }
 }

@@ -9,13 +9,6 @@ import cuit.pymjl.core.entity.user.dto.UserDTO;
  * @date 2022/5/25 16:47
  **/
 public interface UserService {
-    /**
-     * 注册
-     *
-     * @param userDTO 用户dto
-     * @return {@code Boolean}
-     */
-    Boolean register(UserDTO userDTO);
 
     /**
      * 得到图像验证代码
@@ -29,7 +22,8 @@ public interface UserService {
      * 获得电子邮件代码
      *
      * @param username 用户名
-     * @return {@code Boolean}
+     * @param key      标识符
+     * @param code     图片验证码
      */
-    Boolean getEmailCode(String username);
+    void getEmailCode(String username, String key, String code);
 }
