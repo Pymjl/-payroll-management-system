@@ -5,12 +5,7 @@
          version="4.0">
     <display-name>servlet_druid</display-name>
     <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-        <welcome-file>index.htm</welcome-file>
         <welcome-file>index.jsp</welcome-file>
-        <welcome-file>default.html</welcome-file>
-        <welcome-file>default.htm</welcome-file>
-        <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
 
     <servlet>
@@ -37,6 +32,10 @@
     <error-page>
         <error-code>404</error-code>
         <location>/notFound</location>
+    </error-page>
+    <error-page>
+        <error-code>405</error-code>
+        <location>/notAllowedHandler</location>
     </error-page>
     <error-page>
         <exception-type>cuit.pymjl.core.exception.AppException</exception-type>

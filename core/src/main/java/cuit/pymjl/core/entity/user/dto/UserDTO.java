@@ -1,6 +1,7 @@
 package cuit.pymjl.core.entity.user.dto;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * @author Pymjl
@@ -8,6 +9,7 @@ import lombok.Data;
  * @date 2022/5/25 16:48
  **/
 @Data
+@ToString
 public class UserDTO {
     /**
      * 用户名，邮箱账号
@@ -37,4 +39,9 @@ public class UserDTO {
      * 电话
      */
     private String phone;
+
+    /**
+     * 邮箱验证代码
+     */
+    private String code;
 }

@@ -17,6 +17,7 @@ import java.util.Map;
  * @date 2022/1/19 21:49
  */
 public class JwtUtils {
+
     /**
      * 令牌过期时间
      */
@@ -101,8 +102,22 @@ public class JwtUtils {
      */
     public static String generateToken(Long userId, String nickName) {
         Map<String, Object> map = new HashMap<>();
-        map.put("userId", userId);
+        String id = String.valueOf(userId);
+        map.put("userId", id);
         map.put("nickName", nickName);
         return createJWT(map, tokenExpiredTime);
+    }
+
+    public static long getTokenExpiredTime() {
+        return tokenExpiredTime;
+    }
+
+    public static void main(String[] args) {
+        String token = generateToken(132L, "pymjl");
+        System.out.println(token);
+        Claims claims = verifyJwt(token);
+        Object userId = claims.get("userId");
+        System.out.println(claims.get("userId"));
+
     }
 }

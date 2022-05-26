@@ -30,4 +30,22 @@ public interface UserMapper {
      * @return int
      */
     int addUser(User user);
+
+    /**
+     * 查询用户
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return {@code User}
+     */
+    User queryOne(@Param("username") String username,
+                  @Param("password") String password);
+
+    /**
+     * 通过ID查询用户
+     *
+     * @param userId 用户id
+     * @return {@code User}
+     */
+    User queryOneById(@Param("userId") Long userId);
 }

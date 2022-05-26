@@ -4,16 +4,19 @@ import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Validator;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.mail.MailUtil;
 import cuit.pymjl.core.constant.IdentityEnum;
 import cuit.pymjl.core.constant.MailEnum;
 import cuit.pymjl.core.entity.user.User;
 import cuit.pymjl.core.entity.user.dto.UserDTO;
+import cuit.pymjl.core.entity.user.dto.UserInfoDTO;
 import cuit.pymjl.core.exception.AppException;
 import cuit.pymjl.core.mapper.user.UserMapper;
 import cuit.pymjl.core.service.user.UserService;
 import cuit.pymjl.core.util.JedisUtils;
+import cuit.pymjl.core.util.JwtUtils;
 import cuit.pymjl.core.util.MybatisUtil;
 import cuit.pymjl.core.util.PasswordUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -86,12 +89,54 @@ public class UserServiceImpl implements UserService {
         if (StrUtil.isBlank(imageCode) || !imageCode.equals(code)) {
             throw new AppException("图片验证码错误,请稍后重试");
         }
-        log.info("开始生成验证码.......");
+        log.info("开始生成邮箱验证码.......");
         String emailCode = getRandomString(VERIFY_CODE_LENGTH);
-        log.info("验证码生成成功==>[{}]", code);
+        log.info("邮箱验证码生成成功==>[{}]", emailCode);
         MailUtil.send(username, MailEnum.MAIL_SUBJECT_VERIFY_CODE.getMessage(),
                 MailEnum.getVerifyMailMessage(emailCode), false);
-        JedisUtils.set(username, code, EXPIRATION);
+        JedisUtils.set(username, emailCode, EXPIRATION);
+    }
+
+    @Override
+    public void register(UserDTO userDTO) {
+        log.info("开始验证邮箱验证码......");
+        String code = (String) JedisUtils.get(userDTO.getUsername());
+        JedisUtils.del(code);
+        if (StrUtil.isBlank(code) || !code.equals(userDTO.getCode())) {
+            throw new AppException("邮箱验证码错误");
+        }
+        log.info("邮箱验证码验证成功，开始注册用户.......");
+        User user = BeanUtil.copyProperties(userDTO, User.class);
+        user.setIdentity(IdentityEnum.USER.getIdentity());
+        user.setPassword(PasswordUtils.encrypt(user.getPassword()));
+        userMapper.addUser(user);
+        log.info("注册成功");
+    }
+
+    @Override
+    public String login(UserInfoDTO userInfoDTO) {
+        log.info("开始验证邮箱验证码......");
+        String code = (String) JedisUtils.get(userInfoDTO.getUsername());
+        JedisUtils.del(code);
+        if (StrUtil.isBlank(code) || !code.equals(userInfoDTO.getCode())) {
+            throw new AppException("邮箱验证码错误");
+        }
+        log.info("邮箱验证码验证成功，开始验证用户信息.......");
+        User user = userMapper.queryOne(userInfoDTO.getUsername(),
+                PasswordUtils.encrypt(userInfoDTO.getPassword()));
+        if (ObjectUtil.isNull(user)) {
+            throw new AppException("用户名或密码错误，请重新输入");
+        }
+        log.info("用户信息验证成功，开始生成token");
+        String token = JwtUtils.generateToken(user.getId(), user.getNickname());
+        JedisUtils.set(String.valueOf(user.getId()), token, JwtUtils.getTokenExpiredTime());
+        log.info("token生成成功");
+        return token;
+    }
+
+    @Override
+    public User queryUserById(Long userId) {
+        return userMapper.queryOneById(userId);
     }
 
     /**
