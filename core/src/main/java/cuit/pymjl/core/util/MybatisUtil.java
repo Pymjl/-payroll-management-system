@@ -38,5 +38,16 @@ public class MybatisUtil {
     public static SqlSession openSession() {
         return factory.openSession(true);
     }
+
+    /**
+     * 关闭
+     *
+     * @param session 会话
+     */
+    public static void close(SqlSession session) {
+        if (session != null) {
+            session.close();
+        }
+    }
 }
 

@@ -4,6 +4,7 @@ import cn.hutool.captcha.CircleCaptcha;
 import cuit.pymjl.core.entity.user.dto.UserDTO;
 import cuit.pymjl.core.service.user.impl.UserServiceImpl;
 import cuit.pymjl.core.service.user.UserService;
+import cuit.pymjl.core.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -19,5 +20,10 @@ public class UserServiceTest {
         CircleCaptcha code = userService.getImageVerifyCode("sd");
         System.out.println(code.getCode());
         userService.getImageVerifyCode("sd");
+    }
+
+    @Test
+    void getUserInfo() {
+        System.out.println(JsonUtils.toString(userService.queryUserById(1L)));
     }
 }

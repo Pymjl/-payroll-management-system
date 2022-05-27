@@ -4,8 +4,6 @@ import com.github.pagehelper.Page;
 import cuit.pymjl.core.entity.user.User;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 /**
  * @author Pymjl
  * @version 1.0
@@ -48,4 +46,11 @@ public interface UserMapper {
      * @return {@code User}
      */
     User queryOneById(@Param("userId") Long userId);
+
+    /**
+     * 查询用户数量
+     *
+     * @return {@code Integer}
+     */
+    Integer selectUserNumbers();
 }

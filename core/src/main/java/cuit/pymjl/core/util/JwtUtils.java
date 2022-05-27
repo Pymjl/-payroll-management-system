@@ -19,7 +19,7 @@ import java.util.Map;
 public class JwtUtils {
 
     /**
-     * 令牌过期时间
+     * 令牌过期时间，单位秒
      */
     private static final long tokenExpiredTime = 36000;
 
@@ -79,6 +79,7 @@ public class JwtUtils {
                     .setSigningKey(key)
                     .parseClaimsJws(token).getBody();
         } catch (Exception e) {
+            e.printStackTrace();
             claims = null;
         }//设置需要解析的jwt
         return claims;
@@ -105,7 +106,7 @@ public class JwtUtils {
         String id = String.valueOf(userId);
         map.put("userId", id);
         map.put("nickName", nickName);
-        return createJWT(map, tokenExpiredTime);
+        return createJWT(map, tokenExpiredTime * 1000);
     }
 
     public static long getTokenExpiredTime() {

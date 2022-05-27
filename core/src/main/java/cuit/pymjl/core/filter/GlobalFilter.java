@@ -55,7 +55,7 @@ public class GlobalFilter implements Filter {
                     }
                     String userId = (String) claims.get("userId");
                     String redisToken = (String) JedisUtils.get(userId);
-                    if (StrUtil.isBlank(redisToken)) {
+                    if (StrUtil.isBlank(redisToken) || !redisToken.equals(token)) {
                         throw new AppException("token已过期,请重新登录");
                     }
                     //TODO 进行简单的鉴权
@@ -64,8 +64,9 @@ public class GlobalFilter implements Filter {
                 } else {
                     throw new AppException("Token格式错误，应为Bearer Token");
                 }
+            } else {
+                throw new AppException("请先登录");
             }
-            throw new AppException("请先登录");
         }
     }
 }

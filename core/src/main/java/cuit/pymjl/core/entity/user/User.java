@@ -1,5 +1,7 @@
 package cuit.pymjl.core.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +32,7 @@ public class User implements Serializable {
     /**
      * 密码
      */
+    @JsonIgnore
     private String password;
     /**
      * 昵称
@@ -46,10 +49,12 @@ public class User implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT8")
     private Date createTime;
     /**
      * 更新时间
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT8")
     private Date updateTime;
     /**
      * 银行账号

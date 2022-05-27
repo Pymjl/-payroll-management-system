@@ -27,4 +27,10 @@
         from t_user
     </select>
 
+    <select id="selectUserNumbers" resultType="java.lang.Integer">
+        select count(*)
+        from t_user
+    </select>
+
+
 </mapper>

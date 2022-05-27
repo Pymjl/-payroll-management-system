@@ -20,6 +20,7 @@ import cuit.pymjl.core.util.JwtUtils;
 import cuit.pymjl.core.util.MybatisUtil;
 import cuit.pymjl.core.util.PasswordUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.SqlSession;
 
 import java.util.Random;
 
@@ -34,11 +35,6 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl() {
     }
-
-    /**
-     * 用户映射器
-     */
-    private static final UserMapper userMapper = MybatisUtil.openSession().getMapper(UserMapper.class);
 
     /**
      * 验证码过期时间,单位秒
@@ -99,18 +95,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void register(UserDTO userDTO) {
-        log.info("开始验证邮箱验证码......");
-        String code = (String) JedisUtils.get(userDTO.getUsername());
-        JedisUtils.del(code);
-        if (StrUtil.isBlank(code) || !code.equals(userDTO.getCode())) {
-            throw new AppException("邮箱验证码错误");
+        SqlSession sqlSession = null;
+        try {
+            log.info("开始验证邮箱验证码......");
+            String code = (String) JedisUtils.get(userDTO.getUsername());
+            JedisUtils.del(code);
+            if (StrUtil.isBlank(code) || !code.equals(userDTO.getCode())) {
+                throw new AppException("邮箱验证码错误");
+            }
+            log.info("邮箱验证码验证成功，开始注册用户.......");
+            User user = BeanUtil.copyProperties(userDTO, User.class);
+            user.setIdentity(IdentityEnum.USER.getIdentity());
+            user.setPassword(PasswordUtils.encrypt(user.getPassword()));
+            sqlSession = MybatisUtil.openSession();
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            userMapper.addUser(user);
+            log.info("注册成功");
+        } finally {
+            MybatisUtil.close(sqlSession);
         }
-        log.info("邮箱验证码验证成功，开始注册用户.......");
-        User user = BeanUtil.copyProperties(userDTO, User.class);
-        user.setIdentity(IdentityEnum.USER.getIdentity());
-        user.setPassword(PasswordUtils.encrypt(user.getPassword()));
-        userMapper.addUser(user);
-        log.info("注册成功");
     }
 
     @Override
@@ -122,6 +125,7 @@ public class UserServiceImpl implements UserService {
             throw new AppException("邮箱验证码错误");
         }
         log.info("邮箱验证码验证成功，开始验证用户信息.......");
+        UserMapper userMapper = MybatisUtil.openSession().getMapper(UserMapper.class);
         User user = userMapper.queryOne(userInfoDTO.getUsername(),
                 PasswordUtils.encrypt(userInfoDTO.getPassword()));
         if (ObjectUtil.isNull(user)) {
@@ -136,7 +140,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User queryUserById(Long userId) {
-        return userMapper.queryOneById(userId);
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MybatisUtil.openSession();
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            return userMapper.queryOneById(userId);
+        } finally {
+            MybatisUtil.close(sqlSession);
+        }
     }
 
     /**
