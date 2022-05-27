@@ -1,6 +1,7 @@
 package cuit.pymjl.core.service.user;
 
 import cn.hutool.captcha.CircleCaptcha;
+import com.github.pagehelper.Page;
 import cuit.pymjl.core.entity.user.User;
 import cuit.pymjl.core.entity.user.dto.UserDTO;
 import cuit.pymjl.core.entity.user.dto.UserInfoDTO;
@@ -52,4 +53,20 @@ public interface UserService {
      * @return {@code User}
      */
     User queryUserById(Long userId);
+
+    /**
+     * 注销
+     *
+     * @param userId 用户id
+     */
+    void logout(Long userId);
+
+    /**
+     * 查询用户列表
+     *
+     * @param pageNum  页面num
+     * @param pageSize 页面大小
+     * @return {@code Page<User>}
+     */
+    Page<User> queryUsers(Integer pageNum, Integer pageSize);
 }

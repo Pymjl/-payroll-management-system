@@ -5,10 +5,7 @@ import com.github.pagehelper.Page;
 import cuit.pymjl.core.entity.user.User;
 import cuit.pymjl.core.mapper.user.UserMapper;
 import cuit.pymjl.core.result.PageResult;
-import cuit.pymjl.core.util.JsonUtils;
-import cuit.pymjl.core.util.JwtUtils;
-import cuit.pymjl.core.util.MybatisUtil;
-import cuit.pymjl.core.util.PasswordUtils;
+import cuit.pymjl.core.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import redis.clients.jedis.Jedis;
@@ -36,5 +33,10 @@ public class JWT {
         UserMapper userMapper = MybatisUtil.openSession().getMapper(UserMapper.class);
         Page<User> users = userMapper.queryUsers(1, 5);
         System.out.println(JsonUtils.toString(new PageResult<>(users)));
+    }
+
+    @Test
+    void deleteKey() {
+        JedisUtils.del("1");
     }
 }

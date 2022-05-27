@@ -7,6 +7,7 @@ import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.mail.MailUtil;
+import com.github.pagehelper.Page;
 import cuit.pymjl.core.constant.Avatar;
 import cuit.pymjl.core.constant.IdentityEnum;
 import cuit.pymjl.core.constant.MailEnum;
@@ -122,7 +123,7 @@ public class UserServiceImpl implements UserService {
     public String login(UserInfoDTO userInfoDTO) {
         log.info("开始验证邮箱验证码......");
         String code = (String) JedisUtils.get(userInfoDTO.getUsername());
-        JedisUtils.del(code);
+        JedisUtils.del(userInfoDTO.getUsername());
         if (StrUtil.isBlank(code) || !code.equals(userInfoDTO.getCode())) {
             throw new AppException("邮箱验证码错误");
         }
@@ -147,6 +148,30 @@ public class UserServiceImpl implements UserService {
             sqlSession = MybatisUtil.openSession();
             UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
             return userMapper.queryOneById(userId);
+        } finally {
+            MybatisUtil.close(sqlSession);
+        }
+    }
+
+    @Override
+    public void logout(Long userId) {
+        log.info("开始注销......");
+        String token = (String) JedisUtils.get(String.valueOf(userId));
+        if (StrUtil.isNotBlank(token)) {
+            JedisUtils.del(userId.toString());
+            log.info("注销成功");
+        } else {
+            throw new AppException("发生未知错误,token不存在");
+        }
+    }
+
+    @Override
+    public Page<User> queryUsers(Integer pageNum, Integer pageSize) {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MybatisUtil.openSession();
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            return userMapper.queryUsers(pageNum, pageSize);
         } finally {
             MybatisUtil.close(sqlSession);
         }

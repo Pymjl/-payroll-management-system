@@ -2,7 +2,12 @@ package cuit.pymjl.core.filter;
 
 
 import cn.hutool.core.util.StrUtil;
+import cuit.pymjl.core.constant.IdentityEnum;
+import cuit.pymjl.core.entity.user.User;
 import cuit.pymjl.core.exception.AppException;
+import cuit.pymjl.core.factory.SingletonFactory;
+import cuit.pymjl.core.service.user.UserService;
+import cuit.pymjl.core.service.user.impl.UserServiceImpl;
 import cuit.pymjl.core.util.JedisUtils;
 import cuit.pymjl.core.util.JwtUtils;
 import io.jsonwebtoken.Claims;
@@ -58,7 +63,7 @@ public class GlobalFilter implements Filter {
                     if (StrUtil.isBlank(redisToken) || !redisToken.equals(token)) {
                         throw new AppException("token已过期,请重新登录");
                     }
-                    //TODO 进行简单的鉴权
+                    checkIdentity(uri, userId);
                     req.setAttribute("userId", userId);
                     chain.doFilter(req, response);
                 } else {
@@ -67,6 +72,24 @@ public class GlobalFilter implements Filter {
             } else {
                 throw new AppException("请先登录");
             }
+        }
+    }
+
+    /**
+     * 检查身份
+     *
+     * @param uri    uri
+     * @param userId 用户id
+     */
+    private void checkIdentity(String uri, String userId) {
+        UserService userService = SingletonFactory.getInstance(UserServiceImpl.class);
+        User user = userService.queryUserById(Long.parseLong(userId));
+        if (uri.contains("admin")) {
+            if (!user.getIdentity().equals(IdentityEnum.ADMIN.getIdentity())) {
+                throw new AppException("权限不足,该接口需要管理员身份才能访问");
+            }
+        } else if (user.getIdentity().equals(IdentityEnum.BANNED_USER.getIdentity())) {
+            throw new AppException("您的账号已被封禁，请联系管理员解封账户后才能继续访问");
         }
     }
 }
