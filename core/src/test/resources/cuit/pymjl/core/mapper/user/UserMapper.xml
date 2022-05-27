@@ -13,13 +13,14 @@
         <result column="nickname" property="nickname"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
+        <result column="avatar" property="avatar"/>
     </resultMap>
 
     <insert id="addUser" parameterType="cuit.pymjl.core.entity.user.User">
         insert into t_user(username, password, nickname, gender, age, phone, account, identity, create_time,
-                           update_time)
+                           update_time, avatar)
         values (#{username}, #{password}, #{nickname}, #{gender}, #{age}, #{phone}, #{account}, #{identity}, now(),
-                now())
+                now(), #{avatar})
     </insert>
 
     <select id="queryUsers" resultMap="userMap">
@@ -38,6 +39,11 @@
         select *
         from t_user
         where id = #{userId}
+    </select>
+
+    <select id="selectUserNumbers" resultType="java.lang.Integer">
+        select count(*)
+        from t_user
     </select>
 
 </mapper>

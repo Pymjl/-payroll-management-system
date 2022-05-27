@@ -7,6 +7,7 @@ import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.mail.MailUtil;
+import cuit.pymjl.core.constant.Avatar;
 import cuit.pymjl.core.constant.IdentityEnum;
 import cuit.pymjl.core.constant.MailEnum;
 import cuit.pymjl.core.entity.user.User;
@@ -107,6 +108,7 @@ public class UserServiceImpl implements UserService {
             User user = BeanUtil.copyProperties(userDTO, User.class);
             user.setIdentity(IdentityEnum.USER.getIdentity());
             user.setPassword(PasswordUtils.encrypt(user.getPassword()));
+            user.setAvatar(Avatar.DEFAULT.getPath());
             sqlSession = MybatisUtil.openSession();
             UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
             userMapper.addUser(user);

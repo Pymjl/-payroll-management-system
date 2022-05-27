@@ -69,5 +69,10 @@ public class User implements Serializable {
      */
     private Integer identity;
 
+    /**
+     * 头像
+     */
+    private String avatar;
+
 }
 
