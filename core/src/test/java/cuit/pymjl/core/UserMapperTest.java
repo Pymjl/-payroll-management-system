@@ -32,6 +32,11 @@ public class UserMapperTest {
     @Test
     void testPage() {
         Page<User> users = mapper.queryUsers(1, 5);
-        System.out.println(JsonUtils.toString(new PageResult<>(users)));
+        System.out.println(users);
+        //System.out.println(JsonUtils.toString(new PageResult<>(users)));
+    }
+    @Test
+    void test1(){
+
     }
 }
