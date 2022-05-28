@@ -45,6 +45,16 @@ public class EncodingFilter implements Filter {
 
         req.setCharacterEncoding("utf-8");
         resp.setCharacterEncoding("utf-8");
+        /* 允许跨域的主机地址 */
+        resp.setHeader("Access-Control-Allow-Origin", "*");
+        /* 允许跨域的请求方法GET, POST, HEAD 等 */
+        resp.setHeader("Access-Control-Allow-Methods", "*");
+        /* 重新预检验跨域的缓存时间 (s) */
+        resp.setHeader("Access-Control-Max-Age", "3600");
+        /* 允许跨域的请求头 */
+        resp.setHeader("Access-Control-Allow-Headers", "*");
+        /* 是否携带cookie */
+        resp.setHeader("Access-Control-Allow-Credentials", "true");
         resp.setContentType("application/json;charset=utf-8");
         chain.doFilter(req, resp);
     }
