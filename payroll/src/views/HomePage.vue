@@ -17,4 +17,9 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+@import "../style/var.scss";
+h1 {
+  color: $color;
+}
+</style>
