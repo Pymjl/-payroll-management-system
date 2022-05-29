@@ -14,6 +14,17 @@
         <result column="staff_name" property="staffName"/>
         <result column="staff_position" property="staffPosition"/>
         <result column="staff_department_id" property="staffDepartmentId"/>
+        <result column="staff_leave_num" property="staffLeaveNum"/>
+        <result column="staff_late_num" property="staffLateNum"/>
+    </resultMap>
+
+    <resultMap id="staffMap" type="cuit.pymjl.core.entity.department.Staff">
+        <id column="staff_id" property="staffId"/>
+        <result column="staff_name" property="staffName"/>
+        <result column="staff_sex" property="staffSex"/>
+        <result column="staff_age" property="staffAge"/>
+        <result column="staff_department_id" property="staffDepartmentId"/>
+        <result column="staff_phone_number" property="staffPhoneNumber"/>
     </resultMap>
 
     <select id="getDepartment" parameterType="int" resultMap="departmentMap">
@@ -21,12 +32,21 @@
         from t_department where  department_id=#{departmentId}
     </select>
 
+    <insert id="addDepartment" parameterType="cuit.pymjl.core.entity.department.Department">
+        insert into t_department(department_id,department_name,department_boss_name) values(#{id},#{name},#{boss})
+    </insert>
+
     <select id="getDepartmentStaff" parameterType="int" resultMap="departmentStaffMap">
-        select staff_id,staff_name,staff_position,staff_department_id from t_department_staff where staff_department_id=#{staffDepartmentId}
+        select * from t_department_staff where staff_department_id=#{staffDepartmentId}
     </select>
 
     <select id="getDepartmentInformation" parameterType="int" resultMap="departmentMap">
         select department_id,department_name,department_boss_name,department_boss_id,department_num
         from t_department where department_id=#{departmentId}
+    </select>
+
+    <select id="getStaffInformation" parameterType="int" resultMap="staffMap">
+        select *
+        from t_staff where staff_department_id=#{staffDepartmentId}
     </select>
 </mapper>

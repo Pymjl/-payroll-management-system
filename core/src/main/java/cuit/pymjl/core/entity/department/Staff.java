@@ -9,29 +9,29 @@ import lombok.ToString;
 @NoArgsConstructor
 @Data
 @ToString
-public class DepartmentStaff {
+public class Staff {
     /*
-    员工的编号
+    员工编号
      */
     private int staffId;
     /*
-    员工的名字
+    员工姓名
      */
     private String staffName;
     /*
-    员工的职位
+    员工性别
      */
-    private int staffPosition;
+    private String staffSex;
     /*
-    部门的编号
+    员工年龄
+     */
+    private int staffAge;
+    /*
+    员工所属部门编号
      */
     private int staffDepartmentId;
     /*
-    员工的早退次数
+    员工电话号码
      */
-    private int staffLeaveNum;
-    /*
-    员工的迟到次数
-     */
-    private int staffLateNum;
+    private String staffPhoneNumber;
 }
