@@ -11,7 +11,7 @@
           ><input
             id="username"
             type="text"
-            :value="userInfo.username"
+            v-model="userInfo.username"
             required
           />
         </div>
@@ -23,16 +23,28 @@
           ><input
             id="password"
             type="password"
-            :value="userInfo.password"
+            v-model="userInfo.password"
             required
           />
         </div>
-        <n-space class="code" justify="space-between">
-          <input type="text" :value="userInfo.code" required />
-          <n-button type="info" secondary>获取验证码</n-button>
+        <n-space justify="center">
+          <input v-model="userInfo.code" placeholder="图片验证码" />
+          <n-button
+            secondary
+            class="verifyCode"
+            :style="
+              verifyCode ? { backgroundImage: `url(${verifyCode})` } : null
+            "
+            :loading="isLoading"
+            @click="getCode"
+          ></n-button>
+        </n-space>
+        <n-space justify="center">
+          <input v-model="userInfo.emailCode" placeholder="邮箱验证码" />
+          <n-button round @click="getEmailCodeEvent">获取邮箱验证码</n-button>
         </n-space>
       </div>
-      <div id="loginBtn">登录</div>
+      <div id="loginBtn" @click="signIn">登录</div>
       <div class="register">
         还没有账号？<span id="registerBtn" @click="jump">立即注册</span>
       </div>
@@ -41,8 +53,8 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
-import { useMessage, NButton, NSpace, NIcon } from "naive-ui";
+import { defineComponent } from "vue";
+import { NButton, NSpace, NIcon } from "naive-ui";
 import { UserFavorite, SubnetAclRules } from "@vicons/carbon";
 import useLogin from "../componables/login";
 
@@ -57,18 +69,24 @@ export default defineComponent({
   },
   props: {},
   setup() {
-    const { jump } = useLogin();
-    const message = useMessage();
-    message.info("info");
-    const userInfo = ref({
-      username: "",
-      password: "",
-      code: "",
-    });
+    const {
+      userInfo,
+      verifyCode,
+      isLoading,
+      getCode,
+      jump,
+      signIn,
+      getEmailCodeEvent,
+    } = useLogin();
 
     return {
       userInfo,
+      verifyCode,
+      isLoading,
       jump,
+      signIn,
+      getCode,
+      getEmailCodeEvent,
     };
   },
 });

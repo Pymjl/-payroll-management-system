@@ -18,7 +18,7 @@
   color: #eee;
   .login {
     width: 420px;
-    height: 380px;
+    height: 406px;
     margin: 0 auto;
     padding: 1px;
     margin-top: calc((100vh - 380px) / 2);
@@ -65,16 +65,24 @@
       .box:nth-child(2) {
         margin-top: 20px;
       }
-      .code {
-        margin: 0 auto;
-        width: 350px;
-        height: 40px;
+      .n-space {
         transform: translateY(15px);
         input {
           margin-top: 10px;
           border-bottom: 1px solid #eee;
           width: 200px;
+          text-align: center;
+          color: #eee;
         }
+        input::-webkit-input-placeholder {
+          color: rgba(232, 230, 230, 0.442);
+        }
+      }
+      .verifyCode {
+        width: 134px;
+        /* 背景图垂直、水平均居中 */
+        background-position: center center;
+        background-size: cover;
       }
     }
 

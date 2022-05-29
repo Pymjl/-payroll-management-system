@@ -6,10 +6,10 @@ import axios from "axios";
 
 const Service = axios.create({
   baseURL: "http://localhost:8080",
-  timeout: 10000,
-  // headers: {
-  //   "Content-Type": "application/json",
-  // },
+  timeout: 30000,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 // 当前所有请求

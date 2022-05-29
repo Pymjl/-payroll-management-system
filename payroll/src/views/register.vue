@@ -48,16 +48,26 @@
           <n-input v-model:value="model.phone" placeholder="请输入电话号码" />
         </n-form-item>
       </n-form>
-      <n-space justify="space-around">
+      <n-space justify="center">
+        <n-input v-model:value="model.code" placeholder="图片验证码"></n-input>
+        <n-button
+          secondary
+          class="verifyCode"
+          :style="verifyCode ? { backgroundImage: `url(${verifyCode})` } : null"
+          :loading="isLoading"
+          @click="getCode"
+        ></n-button>
+      </n-space>
+      <n-space justify="center">
         <n-input
-          v-model:value="model.code"
-          placeholder="请输入邮箱验证码"
+          v-model:value="model.emailCode"
+          placeholder="邮箱验证码"
         ></n-input>
-        <n-button round>获取验证码</n-button>
+        <n-button round @click="getEmailCodeEvent">获取邮箱验证码</n-button>
       </n-space>
       <!-- 提交 -->
       <div style="display: flex; justify-content: center; margin-top: 10px">
-        <n-button type="primary"> 注册 </n-button>
+        <n-button type="primary" @click="registerEvent"> 注册 </n-button>
       </div>
     </n-card>
   </div>
@@ -93,11 +103,24 @@ export default defineComponent({
   },
   setup() {
     const formRef = ref(null);
-    const { model, rules } = useRegister();
+    const {
+      model,
+      rules,
+      verifyCode,
+      isLoading,
+      getCode,
+      registerEvent,
+      getEmailCodeEvent,
+    } = useRegister();
     return {
       formRef,
       model,
       rules,
+      verifyCode,
+      isLoading,
+      getCode,
+      registerEvent,
+      getEmailCodeEvent,
     };
   },
 });
@@ -116,6 +139,12 @@ export default defineComponent({
     max-width: 450px;
     .n-h1 {
       text-align: center;
+    }
+    .verifyCode {
+      width: 134px;
+      /* 背景图垂直、水平均居中 */
+      background-position: center center;
+      background-size: cover;
     }
   }
 }
