@@ -32,7 +32,6 @@ export default () => {
       }).then((res) => {
         isLoading.value = false;
         verifyCode.value = window.URL.createObjectURL(res.data);
-        console.log(verifyCode);
       });
     }
   };
@@ -44,7 +43,6 @@ export default () => {
       userInfo.value.username,
       userInfo.value.code
     ).then(({ res, succeed }) => {
-      console.log(succeed);
       loading.destroy();
       if (succeed) {
         message.success("验证码已发送");

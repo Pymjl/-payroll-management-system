@@ -1,18 +1,150 @@
 <template>
-  <h1>Vue3+axios+Naive</h1>
-  <n-button type="primary">start</n-button>
+  <nav-header></nav-header>
+  <n-layout has-sider :native-scrollbar="false">
+    <!--  侧边栏 -->
+    <n-layout-sider bordered>
+      <n-menu :options="menuOptions" default-value="analysis" />
+    </n-layout-sider>
+    <!-- 内容 -->
+    <n-layout-content content-style="padding: 24px;">
+      <router-view />
+    </n-layout-content>
+  </n-layout>
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import { NButton } from "naive-ui";
+import { defineComponent, h, ref, onMounted } from "vue";
+import {
+  NIcon,
+  NMenu,
+  NLayout,
+  NLayoutSider,
+  NLayoutContent,
+  useMessage,
+} from "naive-ui";
+import { RouterLink } from "vue-router";
+import NavHeader from "@/components/navHeader.vue";
+import { getUserInfo } from "../api/load.js";
+import {
+  Home,
+  UserProfile,
+  IdManagement,
+  Finance,
+  TimePlot,
+} from "@vicons/carbon";
 
 export default defineComponent({
   name: "HomePage",
-  components: { NButton },
+  components: {
+    NMenu,
+    NavHeader,
+    NLayout,
+    NLayoutSider,
+    NLayoutContent,
+  },
   props: {},
   setup() {
-    return {};
+    const message = useMessage();
+    const identity = ref(null);
+
+    function renderIcon(icon) {
+      return () => h(NIcon, null, { default: () => h(icon) });
+    }
+    const menuOptions = [
+      // 首页
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "analysis",
+              },
+            },
+            { default: () => "首页" }
+          ),
+        key: "analysis",
+        icon: renderIcon(Home),
+      },
+      // 个人信息
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "personal",
+              },
+            },
+            { default: () => "个人信息" }
+          ),
+        key: "personal",
+        icon: renderIcon(UserProfile),
+      },
+      // 员工管理
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "record",
+              },
+            },
+            { default: () => "员工管理" }
+          ),
+        key: "record",
+        icon: renderIcon(IdManagement),
+      },
+      // 财务部
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "account",
+              },
+            },
+            { default: () => "财务部" }
+          ),
+        key: "account",
+        icon: renderIcon(Finance),
+      },
+      // 员工考勤
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "attendance",
+              },
+            },
+            { default: () => "员工考勤" }
+          ),
+        key: "attendance",
+        icon: renderIcon(TimePlot),
+      },
+    ];
+    const getInfo = () => {
+      getUserInfo().then(({ res, succeed }) => {
+        if (succeed) {
+          identity.value = res.data.identity;
+          if (identity.value === 1) {
+            menuOptions.splice(3, 1);
+          }
+        } else {
+          message.error(res.message);
+        }
+      });
+    };
+    onMounted(() => {
+      getInfo();
+    });
+    return {
+      menuOptions,
+    };
   },
 });
 </script>
@@ -21,5 +153,9 @@ export default defineComponent({
 @import "../style/var.scss";
 h1 {
   color: $color;
+}
+.n-layout-content {
+  height: calc(100vh - 70px);
+  background: #fafafc;
 }
 </style>

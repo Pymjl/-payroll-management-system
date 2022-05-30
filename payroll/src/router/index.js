@@ -9,7 +9,38 @@ const router = createRouter({
       meta: {
         requireAuth: true,
       },
-      children: [],
+      children: [
+        // 首页（数据分析）
+        {
+          path: "/analysis",
+          name: "analysis",
+          component: () => import("../views/analysis.vue"),
+        },
+        // 个人信息
+        {
+          path: "/personal",
+          name: "personal",
+          component: () => import("../views/personal.vue"),
+        },
+        // 员工档案 + 人事调动
+        {
+          path: "/record",
+          name: "record",
+          component: () => import("../views/record.vue"),
+        },
+        // 员工考勤
+        {
+          path: "/attendance",
+          name: "attendance",
+          component: () => import("../views/attendance.vue"),
+        },
+        // 财务部门
+        {
+          path: "/account",
+          name: "account",
+          component: () => import("../views/account.vue"),
+        },
+      ],
     },
     // 登录
     {
@@ -33,7 +64,6 @@ const router = createRouter({
 // 设置前置路由守卫
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
-    console.log("requireAuth");
     // 判断是否需要登录权限
     if (localStorage.getItem("token")) {
       next();
