@@ -16,12 +16,13 @@ import java.util.Map;
  * @author Pymjl
  * @date 2022/1/19 21:49
  */
+@SuppressWarnings("all")
 public class JwtUtils {
 
     /**
      * 令牌过期时间，单位秒
      */
-    private static final long tokenExpiredTime = 36000;
+    private static final long tokenExpiredTime = 1296000;
 
     /**
      * jwt id
