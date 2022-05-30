@@ -27,9 +27,9 @@ import java.io.IOException;
  **/
 @SuppressWarnings("all")
 @Slf4j
-@WebFilter(filterName = "GlobalFilter", urlPatterns = "/*")
 public class GlobalFilter implements Filter {
     private static final String BEARER = "Bearer ";
+    private static final String METHOD = "OPTIONS";
 
     @Override
     public void init(FilterConfig config) throws ServletException {
@@ -40,10 +40,11 @@ public class GlobalFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest req = (HttpServletRequest) request;
         String uri = req.getRequestURI();
+        String method = req.getMethod();
         if (uri.equals("/login") || uri.equals("/register") || uri.equals("/") ||
                 uri.contains("index.jsp") || uri.contains("druid") ||
-                uri.equals("/code/image") || uri.equals("/code/email")) {
-            log.info("请求路径为[{}],直接放行", uri);
+                uri.equals("/code/image") || uri.equals("/code/email") || METHOD.equals(method)) {
+            log.info("请求方法为[{}],请求路径为[{}],直接放行", method, uri);
             chain.doFilter(request, response);
         } else {
             log.info("请求路径为[{}],开始拦截鉴权......", uri);
@@ -65,11 +66,13 @@ public class GlobalFilter implements Filter {
                     }
                     checkIdentity(uri, userId);
                     req.setAttribute("userId", userId);
+                    log.info("token验证成功");
                     chain.doFilter(req, response);
                 } else {
                     throw new AppException("Token格式错误，应为Bearer Token");
                 }
             } else {
+                log.error("请先登录");
                 throw new AppException("请先登录");
             }
         }

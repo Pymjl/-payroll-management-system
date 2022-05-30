@@ -6,6 +6,7 @@ import cuit.pymjl.core.factory.SingletonFactory;
 import cuit.pymjl.core.result.R;
 import cuit.pymjl.core.service.user.UserService;
 import cuit.pymjl.core.service.user.impl.UserServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -17,6 +18,7 @@ import java.io.IOException;
  * @version 1.0
  * @date 2022/5/27 0:35
  **/
+@Slf4j
 @WebServlet(name = "QueryUserServlet", value = "/userInfo")
 public class QueryUserServlet extends HttpServlet {
     @Override
@@ -27,6 +29,7 @@ public class QueryUserServlet extends HttpServlet {
         }
         UserService userService = SingletonFactory.getInstance(UserServiceImpl.class);
         User user = userService.queryUserById(Long.parseLong(userId));
+        log.info("用户信息查询成功==>{}", user);
         response.getWriter().println(R.success(user));
     }
 }

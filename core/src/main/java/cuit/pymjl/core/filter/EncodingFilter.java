@@ -17,7 +17,6 @@ import java.io.IOException;
  * @date 2022/5/25 22:23
  **/
 @Slf4j
-@WebFilter(filterName = "EncodingFilter", urlPatterns = "/*")
 public class EncodingFilter implements Filter {
     @Override
     public void init(FilterConfig config) throws ServletException {
@@ -40,6 +39,7 @@ public class EncodingFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
+        log.info("开始设置编码......");
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
@@ -50,7 +50,7 @@ public class EncodingFilter implements Filter {
         /* 允许跨域的请求方法GET, POST, HEAD 等 */
         resp.setHeader("Access-Control-Allow-Methods", "*");
         /* 重新预检验跨域的缓存时间 (s) */
-        resp.setHeader("Access-Control-Max-Age", "3600");
+        resp.setHeader("Access-Control-Max-Age", "36000 ");
         /* 允许跨域的请求头 */
         resp.setHeader("Access-Control-Allow-Headers", "*");
         /* 是否携带cookie */
