@@ -31,7 +31,9 @@ import {
   IdManagement,
   Finance,
   TimePlot,
+  Logout,
 } from "@vicons/carbon";
+import ls from "../utils/ls.js";
 
 export default defineComponent({
   name: "HomePage",
@@ -46,6 +48,7 @@ export default defineComponent({
   setup() {
     const message = useMessage();
     const identity = ref(null);
+    const isShow = ref(null);
 
     function renderIcon(icon) {
       return () => h(NIcon, null, { default: () => h(icon) });
@@ -95,6 +98,7 @@ export default defineComponent({
           ),
         key: "record",
         icon: renderIcon(IdManagement),
+        disabled: isShow.value ? false : true,
       },
       // 财务部
       {
@@ -110,6 +114,7 @@ export default defineComponent({
           ),
         key: "account",
         icon: renderIcon(Finance),
+        disabled: isShow.value ? false : true,
       },
       // 员工考勤
       {
@@ -125,14 +130,37 @@ export default defineComponent({
           ),
         key: "attendance",
         icon: renderIcon(TimePlot),
+        disabled: isShow.value ? false : true,
+      },
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                path: "/login",
+              },
+              onClick: () => {
+                ls.clear();
+                window.location.reload();
+              },
+            },
+            { default: () => "退出登录" }
+          ),
+        key: "logout",
+        icon: renderIcon(Logout),
       },
     ];
     const getInfo = () => {
       getUserInfo().then(({ res, succeed }) => {
         if (succeed) {
+          ls.setItem("user", res.data);
           identity.value = res.data.identity;
-          if (identity.value === 1) {
-            menuOptions.splice(3, 1);
+          // 判断是否是管理员
+          if (identity.value === 0) {
+            isShow.value = false;
+          } else {
+            isShow.value = true;
           }
         } else {
           message.error(res.message);
