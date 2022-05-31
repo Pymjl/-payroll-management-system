@@ -69,4 +69,20 @@ public interface UserService {
      * @return {@code Page<User>}
      */
     Page<User> queryUsers(Integer pageNum, Integer pageSize);
+
+    /**
+     * 重置密码
+     *
+     * @param username 用户名
+     * @param code     代码
+     */
+    void resetPassword(String username, String code);
+
+    /**
+     * 更新密码
+     *
+     * @param password 新密码
+     * @param userId   用户id
+     */
+    void updatePassword(String password, Long userId);
 }

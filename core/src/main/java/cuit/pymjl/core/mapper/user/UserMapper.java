@@ -53,4 +53,24 @@ public interface UserMapper {
      * @return {@code Integer}
      */
     Integer selectUserNumbers();
+
+    /**
+     * 更新密码
+     *
+     * @param username 用户名
+     * @param password 新密码
+     * @return int
+     */
+    int updatePassword(@Param("username") String username,
+                       @Param("password") String password);
+
+    /**
+     * 更新密码
+     *
+     * @param userId   用户id
+     * @param password 密码
+     * @return int
+     */
+    int updatePasswordById(@Param("userId") Long userId,
+                       @Param("password") String password);
 }

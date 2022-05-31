@@ -63,6 +63,11 @@ public class UserServiceImpl implements UserService {
      */
     private static final int VERIFY_CODE_HEIGHT = 100;
 
+    /**
+     * 重置后的密码默认长度
+     */
+    private static final int PASSWORD_LENGTH = 10;
+
     @Override
     public CircleCaptcha getImageVerifyCode(String key) {
         log.info("开始生成验证码.........");
@@ -177,6 +182,57 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void resetPassword(String username, String code) {
+        //验证用户名
+        if (!Validator.isEmail(username)) {
+            throw new AppException("用户名格式错误，用户名应该为邮箱");
+        }
+        //验证code
+        String verifyCode = (String) JedisUtils.get(username);
+        JedisUtils.del(username);
+        if (verifyCode == null || !verifyCode.equals(code)) {
+            throw new AppException("验证码错误");
+        }
+        log.info("邮箱验证码验证成功");
+        SqlSession sqlSession = null;
+        try {
+            //重置密码
+            sqlSession = MybatisUtil.openSession();
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            String newPassword = getRandomString(PASSWORD_LENGTH);
+            String encrypt = PasswordUtils.encrypt(newPassword);
+            int result = userMapper.updatePassword(username, encrypt);
+            if (result != 1) {
+                throw new AppException("该用户不存在");
+            }
+            log.info("密码重置成功，开始发送邮箱");
+            //将新密码通过邮箱发送给用户
+            MailUtil.send(username, MailEnum.MAIL_SUBJECT_RESET_PASSWORD.getMessage(),
+                    MailEnum.getRestPasswordMessage(newPassword), false);
+        } finally {
+            MybatisUtil.close(sqlSession);
+        }
+
+    }
+
+    @Override
+    public void updatePassword(String password, Long userId) {
+        log.info("开始更新密码......");
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MybatisUtil.openSession();
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            int result = userMapper.updatePasswordById(userId, PasswordUtils.encrypt(password));
+            if (result != 1) {
+                throw new AppException("发生未知错误，用户不存在");
+            }
+            log.info("更新成功");
+        } finally {
+            MybatisUtil.close(sqlSession);
+        }
+    }
+
     /**
      * 得到随机字符串
      *
@@ -189,7 +245,7 @@ public class UserServiceImpl implements UserService {
         Random random = new Random();
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < length; i++) {
-            int number = random.nextInt(62);
+            int number = random.nextInt(str.length());
             sb.append(str.charAt(number));
         }
         return sb.toString();

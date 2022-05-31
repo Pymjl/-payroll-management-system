@@ -42,7 +42,7 @@ public class GlobalFilter implements Filter {
         String uri = req.getRequestURI();
         String method = req.getMethod();
         if (uri.equals("/login") || uri.equals("/register") || uri.equals("/") ||
-                uri.contains("index.jsp") || uri.contains("druid") ||
+                uri.contains("index.jsp") || uri.contains("druid") || uri.equals("/reset/password") ||
                 uri.equals("/code/image") || uri.equals("/code/email") || METHOD.equals(method)) {
             log.info("请求方法为[{}],请求路径为[{}],直接放行", method, uri);
             chain.doFilter(request, response);

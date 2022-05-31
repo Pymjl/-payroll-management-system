@@ -45,4 +45,13 @@ public class JsonTest {
     void testJson01() {
         System.out.println(R.fail("发生未知错误"));
     }
+
+    @Test
+    void toMap() {
+        System.out.println(JsonUtils.toMap("{\n" +
+                "    \"username\": \"杨丽\",\n" +
+                "    \"password\": \"Duis Excepteur\",\n" +
+                "    \"code\": \"75\"\n" +
+                "}", String.class, String.class));
+    }
 }

@@ -22,6 +22,19 @@
         values (#{username}, #{password}, #{nickname}, #{gender}, #{age}, #{phone}, #{account}, #{identity}, now(),
                 now(), #{avatar})
     </insert>
+    <update id="updatePassword">
+        update t_user
+        set password=#{password},
+            update_time=now()
+        where username = #{username}
+    </update>
+
+    <update id="updatePasswordById">
+        update t_user
+        set password=#{password},
+            update_time=now()
+        where id = #{userId}
+    </update>
 
     <select id="queryUsers" resultMap="userMap">
         select *
