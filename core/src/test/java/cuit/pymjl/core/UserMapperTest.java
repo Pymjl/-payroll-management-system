@@ -2,11 +2,14 @@ package cuit.pymjl.core;
 
 import com.github.pagehelper.Page;
 import cuit.pymjl.core.entity.user.User;
+import cuit.pymjl.core.entity.user.dto.UserDTO;
 import cuit.pymjl.core.mapper.user.UserMapper;
 import cuit.pymjl.core.result.PageResult;
 import cuit.pymjl.core.util.JsonUtils;
 import cuit.pymjl.core.util.MybatisUtil;
 import org.junit.jupiter.api.Test;
+
+import java.util.Date;
 
 /**
  * @author Pymjl
@@ -35,8 +38,13 @@ public class UserMapperTest {
         System.out.println(users);
         //System.out.println(JsonUtils.toString(new PageResult<>(users)));
     }
-    @Test
-    void test1(){
 
+    @Test
+    void test1() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setNickname("pymjl");
+        userDTO.setPhone("19136310161");
+        userDTO.setUpdateTime(new Date());
+        mapper.updateUserInfo(userDTO, 1L);
     }
 }

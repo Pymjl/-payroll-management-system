@@ -85,4 +85,26 @@ public interface UserService {
      * @param userId   用户id
      */
     void updatePassword(String password, Long userId);
+
+    /**
+     * 封禁用户
+     *
+     * @param userId 用户id
+     */
+    void banUser(Long userId);
+
+    /**
+     * 更新用户信息
+     *
+     * @param userDTO 用户dto
+     * @param userId  用户id
+     */
+    void updateUserInfo(UserDTO userDTO, Long userId);
+
+    /**
+     * 恢复用户身份
+     *
+     * @param userId 用户id
+     */
+    void recoverUserIdentity(Long userId);
 }

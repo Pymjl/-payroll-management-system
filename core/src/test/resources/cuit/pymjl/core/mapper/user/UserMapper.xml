@@ -22,6 +22,37 @@
         values (#{username}, #{password}, #{nickname}, #{gender}, #{age}, #{phone}, #{account}, #{identity}, now(),
                 now(), #{avatar})
     </insert>
+    <update id="updatePassword">
+        update t_user
+        set password=#{password},
+            update_time=now()
+        where username = #{username}
+    </update>
+
+    <update id="updatePasswordById">
+        update t_user
+        set password=#{password},
+            update_time=now()
+        where id = #{userId}
+    </update>
+
+    <update id="banUser">
+        update t_user
+        set identity= -1
+        where id = #{userId}
+    </update>
+
+    <update id="updateUserInfo">
+        update t_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userInfo.nickname !=null">nickname=#{userInfo.nickname},</if>
+            <if test="userInfo.age !=null">age=#{userInfo.age},</if>
+            <if test="userInfo.account !=null">account=#{userInfo.account},</if>
+            <if test="userInfo.phone !=null">phone=#{userInfo.phone},</if>
+            <if test="userInfo.updateTime !=null">update_time=#{userInfo.updateTime}</if>
+        </trim>
+        where id=#{id}
+    </update>
 
     <select id="queryUsers" resultMap="userMap">
         select *

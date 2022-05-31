@@ -24,6 +24,7 @@ import cuit.pymjl.core.util.PasswordUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -228,6 +229,73 @@ public class UserServiceImpl implements UserService {
                 throw new AppException("发生未知错误，用户不存在");
             }
             log.info("更新成功");
+        } finally {
+            MybatisUtil.close(sqlSession);
+        }
+    }
+
+    @Override
+    public void banUser(Long userId) {
+        log.info("开始封禁用户......");
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MybatisUtil.openSession();
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            User user = userMapper.queryOneById(userId);
+            if (ObjectUtil.isNull(user)) {
+                throw new AppException("不存在该用户，封禁失败");
+            } else if (user.getIdentity().equals(IdentityEnum.ADMIN.getIdentity())) {
+                throw new AppException("权限不足，你不能封禁一个管理员");
+            } else if (user.getIdentity().equals(IdentityEnum.BANNED_USER.getIdentity())) {
+                throw new AppException("该用户已经被封禁");
+            }
+            int result = userMapper.banUser(userId);
+            if (result != 1) {
+                throw new AppException("发生未知错误,封禁失败");
+            }
+            log.info("封禁成功");
+        } finally {
+            MybatisUtil.close(sqlSession);
+        }
+
+    }
+
+    @Override
+    public void updateUserInfo(UserDTO userDTO, Long userId) {
+        log.info("开始更新用户信息......");
+        userDTO.setUpdateTime(new Date());
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MybatisUtil.openSession();
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            int result = userMapper.updateUserInfo(userDTO, userId);
+            if (result != 1) {
+                throw new AppException("更新失败");
+            }
+            log.info("更新成功");
+        } finally {
+            MybatisUtil.close(sqlSession);
+        }
+    }
+
+    @Override
+    public void recoverUserIdentity(Long userId) {
+        log.info("开始恢复用户......");
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MybatisUtil.openSession();
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            User user = userMapper.queryOneById(userId);
+            if (ObjectUtil.isNull(user)) {
+                throw new AppException("不存在该用户，恢复失败");
+            } else if (user.getIdentity().equals(IdentityEnum.USER.getIdentity())) {
+                throw new AppException("该用户状态本来就是正常的");
+            }
+            int result = userMapper.recoverUserIdentity(userId);
+            if (result != 1) {
+                throw new AppException("发生未知错误,封禁失败");
+            }
+            log.info("恢复成功");
         } finally {
             MybatisUtil.close(sqlSession);
         }

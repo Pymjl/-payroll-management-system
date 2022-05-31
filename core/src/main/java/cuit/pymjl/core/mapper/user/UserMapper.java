@@ -2,6 +2,7 @@ package cuit.pymjl.core.mapper.user;
 
 import com.github.pagehelper.Page;
 import cuit.pymjl.core.entity.user.User;
+import cuit.pymjl.core.entity.user.dto.UserDTO;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -72,5 +73,33 @@ public interface UserMapper {
      * @return int
      */
     int updatePasswordById(@Param("userId") Long userId,
-                       @Param("password") String password);
+                           @Param("password") String password);
+
+    /**
+     * 冻结用户
+     * FIXME 恢复和冻结应该是一个接口的，设计缺陷，但是我不想改了，害
+     *
+     * @param userId 用户id
+     * @return int
+     */
+    int banUser(@Param("userId") Long userId);
+
+    /**
+     * 恢复用户
+     * FIXME 恢复和冻结应该是一个接口的，设计缺陷，但是我不想改了，害
+     *
+     * @param userId 用户id
+     * @return int
+     */
+    int recoverUserIdentity(@Param("userId") Long userId);
+
+    /**
+     * 更新用户信息
+     *
+     * @param userInfo 用户信息
+     * @param id       id
+     * @return int
+     */
+    int updateUserInfo(@Param("userInfo") UserDTO userInfo, @Param("id") Long id);
+
 }

@@ -3,6 +3,8 @@ package cuit.pymjl.core.entity.user.dto;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.Date;
+
 /**
  * @author Pymjl
  * @version 1.0
@@ -44,4 +46,9 @@ public class UserDTO {
      * 邮箱验证代码
      */
     private String code;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 }

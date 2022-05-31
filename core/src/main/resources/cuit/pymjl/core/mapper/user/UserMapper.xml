@@ -36,6 +36,31 @@
         where id = #{userId}
     </update>
 
+    <update id="banUser">
+        update t_user
+        set identity= -1
+        where id = #{userId}
+    </update>
+
+    <update id="updateUserInfo">
+        update t_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userInfo.nickname !=null">nickname=#{userInfo.nickname},</if>
+            <if test="userInfo.age !=null">age=#{userInfo.age},</if>
+            <if test="userInfo.account !=null">account=#{userInfo.account},</if>
+            <if test="userInfo.phone !=null">phone=#{userInfo.phone},</if>
+            <if test="userInfo.updateTime !=null">update_time=#{userInfo.updateTime}</if>
+        </trim>
+        where id=#{id}
+    </update>
+
+    <update id="recoverUserIdentity">
+        update t_user
+        set identity= 0
+        where id = #{userId}
+    </update>
+
+
     <select id="queryUsers" resultMap="userMap">
         select *
         from t_user
