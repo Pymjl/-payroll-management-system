@@ -2,6 +2,7 @@ package cuit.pymjl.core.servlet.user;
 
 
 import cuit.pymjl.core.entity.user.dto.UserDTO;
+import cuit.pymjl.core.exception.AppException;
 import cuit.pymjl.core.factory.SingletonFactory;
 import cuit.pymjl.core.result.R;
 import cuit.pymjl.core.service.user.UserService;
@@ -33,6 +34,9 @@ public class RegisterServlet extends HttpServlet {
         }
         UserDTO userDTO = JsonUtils.toBean(json, UserDTO.class);
         log.info("读取数据成功==>[{}]", userDTO);
+        if (userDTO.getPassword().length() < 6) {
+            throw new AppException("密码的长度至少为6");
+        }
         UserService userService = SingletonFactory.getInstance(UserServiceImpl.class);
         userService.register(userDTO);
         response.getWriter().println(R.success());
