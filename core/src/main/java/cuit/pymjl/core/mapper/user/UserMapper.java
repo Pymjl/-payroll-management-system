@@ -102,4 +102,12 @@ public interface UserMapper {
      */
     int updateUserInfo(@Param("userInfo") UserDTO userInfo, @Param("id") Long id);
 
+    /**
+     * 通过id删除用户
+     *
+     * @param id id
+     * @return int
+     */
+    int delById(@Param("id") Long id);
+
 }

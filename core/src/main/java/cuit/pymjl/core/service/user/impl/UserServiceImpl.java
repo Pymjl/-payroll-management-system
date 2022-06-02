@@ -301,6 +301,21 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void deleteUser(Long userId) {
+        log.info("开始删除用户......");
+        SqlSession sqlSession = MybatisUtil.openSession();
+        try {
+            UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+            int result = mapper.delById(userId);
+            if (result != 1) {
+                throw new AppException("要删除的用户不存在或该用户是管理员，删除失败");
+            }
+        } finally {
+            MybatisUtil.close(sqlSession);
+        }
+    }
+
     /**
      * 得到随机字符串
      *

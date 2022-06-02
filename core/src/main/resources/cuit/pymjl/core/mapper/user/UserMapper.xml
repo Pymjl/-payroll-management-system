@@ -60,6 +60,13 @@
         where id = #{userId}
     </update>
 
+    <delete id="delById">
+        delete
+        from t_user
+        where id = #{id}
+          and identity != 1
+    </delete>
+
 
     <select id="queryUsers" resultMap="userMap">
         select *

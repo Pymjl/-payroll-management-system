@@ -107,4 +107,11 @@ public interface UserService {
      * @param userId 用户id
      */
     void recoverUserIdentity(Long userId);
+
+    /**
+     * 删除用户
+     *
+     * @param userId 用户id
+     */
+    void deleteUser(Long userId);
 }

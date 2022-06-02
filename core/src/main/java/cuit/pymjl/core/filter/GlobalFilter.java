@@ -64,8 +64,9 @@ public class GlobalFilter implements Filter {
                     if (StrUtil.isBlank(redisToken) || !redisToken.equals(token)) {
                         throw new AppException("token已过期,请重新登录");
                     }
-                    checkIdentity(uri, userId);
+                    User user = checkIdentity(uri, userId);
                     req.setAttribute("userId", userId);
+                    req.setAttribute("userInfo", user);
                     log.info("token验证成功");
                     chain.doFilter(req, response);
                 } else {
@@ -84,7 +85,7 @@ public class GlobalFilter implements Filter {
      * @param uri    uri
      * @param userId 用户id
      */
-    private void checkIdentity(String uri, String userId) {
+    private User checkIdentity(String uri, String userId) {
         UserService userService = SingletonFactory.getInstance(UserServiceImpl.class);
         User user = userService.queryUserById(Long.parseLong(userId));
         if (uri.contains("admin")) {
@@ -94,5 +95,6 @@ public class GlobalFilter implements Filter {
         } else if (user.getIdentity().equals(IdentityEnum.BANNED_USER.getIdentity())) {
             throw new AppException("您的账号已被封禁，请联系管理员解封账户后才能继续访问");
         }
+        return user;
     }
 }
