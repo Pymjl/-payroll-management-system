@@ -1,12 +1,11 @@
 package cuit.pymjl.core.servlet.department;
 
 import cuit.pymjl.core.entity.department.Department;
-import cuit.pymjl.core.entity.department.DepartmentStaff;
 import cuit.pymjl.core.entity.department.Staff;
 import cuit.pymjl.core.exception.AppException;
 import cuit.pymjl.core.factory.SingletonFactory;
-import cuit.pymjl.core.service.Department.DepartmentService;
-import cuit.pymjl.core.service.Department.impl.DepartmentServiceImpl;
+import cuit.pymjl.core.service.department.DepartmentService;
+import cuit.pymjl.core.service.department.impl.DepartmentServiceImpl;
 import cuit.pymjl.core.util.JsonUtils;
 
 import javax.servlet.*;

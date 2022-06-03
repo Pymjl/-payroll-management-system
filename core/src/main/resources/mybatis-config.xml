@@ -47,6 +47,7 @@
     </environments>
 
     <mappers>
-        <package name="cuit.pymjl.core.mapper"/>
+        <package name="cuit.pymjl.core.mapper.department"/>
+        <package name="cuit.pymjl.core.mapper.user"/>
     </mappers>
 </configuration>

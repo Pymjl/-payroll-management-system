@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cuit.pymjl.core.mapper.department.DepartmentMapper">
     <resultMap id="departmentMap" type="cuit.pymjl.core.entity.department.Department">
-        <id column="department_id" property="departmentId"/>
+        <id column="id" property="id"/>
+        <result column="department_id" property="departmentId"/>
         <result column="department_name" property="departmentName"/>
         <result column="department_num" property="departmentNum"/>
         <result column="department_boss_name" property="departmentBossName"/>
@@ -10,7 +11,8 @@
     </resultMap>
 
     <resultMap id="departmentStaffMap" type="cuit.pymjl.core.entity.department.DepartmentStaff">
-        <id column="staff_id" property="staffId"/>
+        <id column="id" property="id"/>
+        <result column="staff_id" property="staffId"/>
         <result column="staff_name" property="staffName"/>
         <result column="staff_position" property="staffPosition"/>
         <result column="staff_department_id" property="staffDepartmentId"/>
@@ -19,12 +21,20 @@
     </resultMap>
 
     <resultMap id="staffMap" type="cuit.pymjl.core.entity.department.Staff">
-        <id column="staff_id" property="staffId"/>
+        <id column="id" property="id"/>
+        <result column="staff_id" property="staffId"/>
         <result column="staff_name" property="staffName"/>
         <result column="staff_sex" property="staffSex"/>
         <result column="staff_age" property="staffAge"/>
         <result column="staff_department_id" property="staffDepartmentId"/>
         <result column="staff_phone_number" property="staffPhoneNumber"/>
+    </resultMap>
+
+    <resultMap id="staffAttendanceMap" type="cuit.pymjl.core.entity.department.StaffAttendance">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="department_id" property="departmentId"/>
+        <result column="status" property="status"/>
     </resultMap>
 
     <select id="getDepartment" parameterType="int" resultMap="departmentMap">
@@ -45,8 +55,18 @@
         from t_department where department_id=#{departmentId}
     </select>
 
-    <select id="getStaffInformation" parameterType="int" resultMap="staffMap">
+    <select id="getStaffInformation" resultMap="staffMap">
         select *
         from t_staff where staff_department_id=#{staffDepartmentId}
     </select>
+
+    <select id="getStaffAttendance" parameterType="int" resultMap="staffAttendanceMap">
+        select user_id,department_id,status from t_attendance_personal where department_id=#{staffDepartmentId}
+    </select>
+
+    <update id="updateDepartmentStaff" parameterType="cuit.pymjl.core.entity.department.DepartmentStaff">
+        update t_department_staff set staff_leave_num=#{staffLeaveNum},staff_late_num=#{staffLateNum},update_time=now()
+        where staff_id=#{staffId}
+    </update>
+
 </mapper>
