@@ -64,12 +64,12 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
     }
     @Override
-    public List<Staff> submitStaffAttendance(String bossName, int bossId,int departmentId){
+    public List<DepartmentStaff> submitStaffAttendance(String bossName, int bossId,int departmentId){
         Department department= departmentMapper.getDepartmentInformation(departmentId);
-        List<Staff> staffs=new ArrayList<>();
+        List<DepartmentStaff> staffs=new ArrayList<>();
         if ( department.getDepartmentBossName().equals(bossName) && department.getDepartmentBossId()==bossId){
             collectStaffAttendance("小明",1,1);
-            staffs=departmentMapper.getStaffInformation(departmentId);
+            staffs=departmentMapper.getDepartmentStaff(departmentId);
         }else {
             throw new AppException(bossName+"不是该部门老大");
         }

@@ -37,5 +37,5 @@ public interface DepartmentService {
      * @param departmentId  部门编号
      * @return
      */
-    List<Staff> submitStaffAttendance(String bossName, int bossId, int departmentId);
+    List<DepartmentStaff> submitStaffAttendance(String bossName, int bossId, int departmentId);
 }
