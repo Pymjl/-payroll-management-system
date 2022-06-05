@@ -16,6 +16,7 @@
         <result column="staff_name" property="staffName"/>
         <result column="staff_position" property="staffPosition"/>
         <result column="staff_department_id" property="staffDepartmentId"/>
+        <result column="staff_department_name" property="staffDepartmentName"/>
         <result column="staff_leave_num" property="staffLeaveNum"/>
         <result column="staff_late_num" property="staffLateNum"/>
     </resultMap>
@@ -35,6 +36,14 @@
         <result column="user_id" property="userId"/>
         <result column="department_id" property="departmentId"/>
         <result column="status" property="status"/>
+    </resultMap>
+
+    <resultMap id="staffInformationMap" type="cuit.pymjl.core.entity.department.StaffAttendenceDTO">
+        <id column="id" property="id"/>
+        <result column="avatar" property="avatar"/>
+        <result column="username" property="username"/>
+        <result column="staff_department_name" property="departmentName"/>
+        <result column="account" property="account"/>
     </resultMap>
 
     <select id="getDepartment" parameterType="int" resultMap="departmentMap">
@@ -69,4 +78,11 @@
         where staff_id=#{staffId}
     </update>
 
+    <select id="getAllStaffInformation" resultMap="staffInformationMap">
+        select avatar,t_user.id id,username,staff_department_name,account from t_user join t_department_staff on t_user.id=t_department_staff.id
+    </select>
+
+    <select id="getStaffAttendanceById" parameterType="int" resultMap="staffAttendanceMap">
+        select user_id,department_id,status from t_attendance_personal where user_id=#{staffId}
+    </select>
 </mapper>

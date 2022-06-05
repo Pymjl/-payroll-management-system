@@ -37,6 +37,10 @@ public class DepartmentStaff {
      */
     private Integer staffDepartmentId;
     /**
+     * 部门名字
+     */
+    private String staffDepartmentName;
+    /**
      * 员工的早退次数
      */
     private Integer staffLeaveNum;

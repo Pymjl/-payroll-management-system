@@ -2,8 +2,10 @@ package cuit.pymjl.core.service.department;
 
 import cuit.pymjl.core.entity.department.DepartmentStaff;
 import cuit.pymjl.core.entity.department.Staff;
+import cuit.pymjl.core.entity.department.StaffAttendenceDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DepartmentService {
     /**
@@ -38,4 +40,24 @@ public interface DepartmentService {
      * @return
      */
     List<DepartmentStaff> submitStaffAttendance(String bossName, int bossId, int departmentId);
+
+    /**
+     * 汇总员工出勤情况
+     * @param departmentId 部门id
+     * @return
+     */
+    List<Map<Integer,Map<String,Integer>>> collectUserAttendance(int departmentId);
+
+    /**
+     * 员工计算工资所需要的信息(按部门分)
+     * @param departmentId 部门id
+     * @return 所需信息的列表
+     */
+    List<StaffAttendenceDTO> getUserInformation(int departmentId);
+
+    /**
+     * 获取所有员工计算工资所需要的信息
+     * @return 所需信息的列表
+     */
+    List<StaffAttendenceDTO> getAllUserInformation();
 }

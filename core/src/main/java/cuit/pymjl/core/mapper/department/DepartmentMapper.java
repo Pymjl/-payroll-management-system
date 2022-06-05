@@ -1,9 +1,6 @@
 package cuit.pymjl.core.mapper.department;
 
-import cuit.pymjl.core.entity.department.Department;
-import cuit.pymjl.core.entity.department.DepartmentStaff;
-import cuit.pymjl.core.entity.department.Staff;
-import cuit.pymjl.core.entity.department.StaffAttendance;
+import cuit.pymjl.core.entity.department.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -53,4 +50,8 @@ public interface DepartmentMapper {
      * @param staffLateNum    员工迟到次数
      */
     void updateDepartmentStaff(@Param("staffId") int staffId,@Param("staffLeaveNum") int staffLeaveNum,@Param("staffLateNum") int staffLateNum);
+
+    List<StaffAttendenceDTO> getAllStaffInformation();
+
+    List<StaffAttendance> getStaffAttendanceById(int staffid);
 }
