@@ -13,18 +13,10 @@
 </template>
 
 <script>
-import { defineComponent, h, ref, onMounted } from "vue";
-import {
-  NIcon,
-  NMenu,
-  NLayout,
-  NLayoutSider,
-  NLayoutContent,
-  useMessage,
-} from "naive-ui";
+import { defineComponent, h } from "vue";
+import { NIcon, NMenu, NLayout, NLayoutSider, NLayoutContent } from "naive-ui";
 import { RouterLink } from "vue-router";
 import NavHeader from "@/components/navHeader.vue";
-import { getUserInfo } from "../api/load.js";
 import {
   Home,
   UserProfile,
@@ -34,6 +26,152 @@ import {
   Logout,
 } from "@vicons/carbon";
 import ls from "../utils/ls.js";
+
+function renderIcon(icon) {
+  return () => h(NIcon, null, { default: () => h(icon) });
+}
+
+// 管理员身份
+const adminOptions = [
+  // 首页
+  {
+    label: () =>
+      h(RouterLink, { to: { name: "analysis" } }, { default: () => "首页" }),
+    key: "analysis",
+    icon: renderIcon(Home),
+  },
+  // 个人信息
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "personal",
+          },
+        },
+        { default: () => "个人信息" }
+      ),
+    key: "personal",
+    icon: renderIcon(UserProfile),
+  },
+  // 员工管理
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "record",
+          },
+        },
+        { default: () => "员工档案" }
+      ),
+    key: "record",
+    icon: renderIcon(IdManagement),
+  },
+  // 财务部
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "account",
+          },
+        },
+        { default: () => "财务部" }
+      ),
+    key: "account",
+    icon: renderIcon(Finance),
+  },
+  // 员工考勤
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "attendance",
+          },
+        },
+        { default: () => "员工考勤" }
+      ),
+    key: "attendance",
+    icon: renderIcon(TimePlot),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: "/login",
+          },
+          onClick: () => {
+            ls.clear();
+            window.location.reload();
+          },
+        },
+        { default: () => "退出登录" }
+      ),
+    key: "logout",
+    icon: renderIcon(Logout),
+  },
+];
+// 普通员工身份
+const normalOptions = [
+  // 首页
+  {
+    label: () =>
+      h(RouterLink, { to: { name: "analysis" } }, { default: () => "首页" }),
+    key: "analysis",
+    icon: renderIcon(Home),
+  },
+  // 个人信息
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "personal",
+          },
+        },
+        { default: () => "个人信息" }
+      ),
+    key: "personal",
+    icon: renderIcon(UserProfile),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: "/login",
+          },
+          onClick: () => {
+            ls.clear();
+            window.location.reload();
+          },
+        },
+        { default: () => "退出登录" }
+      ),
+    key: "logout",
+    icon: renderIcon(Logout),
+  },
+];
+// 菜单信息
+let menuOptions = [];
+console.log(ls.getItem("user"));
+console.log(ls.getItem("user").identity);
+// 判断是否是管理员
+if (ls.getItem("user").identity === 0) {
+  menuOptions = normalOptions;
+} else {
+  menuOptions = adminOptions;
+}
 
 export default defineComponent({
   name: "HomePage",
@@ -46,130 +184,6 @@ export default defineComponent({
   },
   props: {},
   setup() {
-    const message = useMessage();
-    const identity = ref(null);
-    const isShow = ref(null);
-
-    function renderIcon(icon) {
-      return () => h(NIcon, null, { default: () => h(icon) });
-    }
-    const menuOptions = [
-      // 首页
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "analysis",
-              },
-            },
-            { default: () => "首页" }
-          ),
-        key: "analysis",
-        icon: renderIcon(Home),
-      },
-      // 个人信息
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "personal",
-              },
-            },
-            { default: () => "个人信息" }
-          ),
-        key: "personal",
-        icon: renderIcon(UserProfile),
-      },
-      // 员工管理
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "record",
-              },
-            },
-            { default: () => "员工管理" }
-          ),
-        key: "record",
-        icon: renderIcon(IdManagement),
-        disabled: isShow.value ? false : true,
-      },
-      // 财务部
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "account",
-              },
-            },
-            { default: () => "财务部" }
-          ),
-        key: "account",
-        icon: renderIcon(Finance),
-        disabled: isShow.value ? false : true,
-      },
-      // 员工考勤
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "attendance",
-              },
-            },
-            { default: () => "员工考勤" }
-          ),
-        key: "attendance",
-        icon: renderIcon(TimePlot),
-        disabled: isShow.value ? false : true,
-      },
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                path: "/login",
-              },
-              onClick: () => {
-                ls.clear();
-                window.location.reload();
-              },
-            },
-            { default: () => "退出登录" }
-          ),
-        key: "logout",
-        icon: renderIcon(Logout),
-      },
-    ];
-    const getInfo = () => {
-      getUserInfo().then(({ res, succeed }) => {
-        if (succeed) {
-          ls.setItem("user", res.data);
-          identity.value = res.data.identity;
-          // 判断是否是管理员
-          if (identity.value === 0) {
-            isShow.value = false;
-          } else {
-            isShow.value = true;
-          }
-        } else {
-          message.error(res.message);
-        }
-      });
-    };
-    onMounted(() => {
-      getInfo();
-    });
     return {
       menuOptions,
     };

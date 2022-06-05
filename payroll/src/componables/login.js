@@ -1,7 +1,8 @@
 import { ref } from "vue";
 import router from "../router";
 import { useMessage } from "naive-ui";
-import { getEmailCode, login } from "../api/load";
+import { getEmailCode, login, getUserInfo } from "../api/load";
+import ls from "../utils/ls";
 import axios from "axios";
 
 export default () => {
@@ -84,7 +85,15 @@ export default () => {
         if (succeed) {
           message.success("登录成功");
           localStorage.setItem("token", res.data);
-          router.push("/");
+          // 获取个人信息
+          getUserInfo().then(({ res, succeed }) => {
+            if (succeed) {
+              ls.setItem("user", res.data);
+              router.push("/");
+            } else {
+              message.error(res.message);
+            }
+          });
         } else {
           message.error(res.message);
         }
