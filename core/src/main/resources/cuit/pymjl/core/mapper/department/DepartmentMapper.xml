@@ -6,7 +6,6 @@
         <result column="department_id" property="departmentId"/>
         <result column="department_name" property="departmentName"/>
         <result column="department_num" property="departmentNum"/>
-        <result column="department_boss_name" property="departmentBossName"/>
         <result column="department_boss_id" property="departmentBossId"/>
     </resultMap>
 
@@ -60,7 +59,7 @@
     </select>
 
     <select id="getDepartmentInformation" parameterType="int" resultMap="departmentMap">
-        select department_id,department_name,department_boss_name,department_boss_id,department_num
+        select *
         from t_department where department_id=#{departmentId}
     </select>
 

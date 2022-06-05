@@ -1,6 +1,7 @@
 package cuit.pymjl.core.service.department.impl;
 
 import cuit.pymjl.core.entity.department.*;
+import cuit.pymjl.core.entity.user.User;
 import cuit.pymjl.core.exception.AppException;
 import cuit.pymjl.core.factory.SingletonFactory;
 import cuit.pymjl.core.mapper.department.DepartmentMapper;
@@ -20,63 +21,64 @@ public class DepartmentServiceImpl implements DepartmentService {
     DepartmentMapper departmentMapper=sqlSession.getMapper(DepartmentMapper.class);
 
     @Override
-    public List<DepartmentStaff> getDepartmentStaff(String bossName, int bossId,int departmentId) {
+    public List<DepartmentStaff> getDepartmentStaff(int bossId,int departmentId) {
         Department department= departmentMapper.getDepartmentInformation(departmentId);
         List<DepartmentStaff> departmentStaffs=new ArrayList<>();
-        if ( department.getDepartmentBossName().equals(bossName) && department.getDepartmentBossId()==bossId){
+        if (department.getDepartmentBossId()==bossId){
             departmentStaffs=departmentMapper.getDepartmentStaff(departmentId);
         }else {
-            throw new AppException(bossName+"不是该部门老大");
+            throw new AppException("编号为"+bossId+"不是该部门老大");
         }
         return departmentStaffs;
     }
     @Override
-    public List<Staff> getStaffInformation(String bossName, int bossId,int departmentId){
-        Department department= departmentMapper.getDepartmentInformation(departmentId);
-        List<Staff> staffs=new ArrayList<>();
-        if ( department.getDepartmentBossName().equals(bossName) && department.getDepartmentBossId()==bossId){
-            staffs=departmentMapper.getStaffInformation(departmentId);
-        }else {
-            throw new AppException(bossName+"不是该部门老大");
+    public List<User> getStaffInformation(int bossId,int departmentId){
+        List<User> userList=new ArrayList<>();
+        DepartmentService departmentService=SingletonFactory.getInstance(DepartmentServiceImpl.class);
+        UserService userService= SingletonFactory.getInstance(UserServiceImpl.class);
+        List<DepartmentStaff> list=departmentService.getDepartmentStaff(bossId,departmentId);
+        for(int i=0;i<list.size();i++){
+            User user=userService.queryUserById(list.get(i).getStaffId().longValue());
+            userList.add(user);
         }
-        return staffs;
+        return userList;
     }
 
-    @Override
-    public void collectStaffAttendance(String bossName, int bossId, int departmentId) {
-        Department department= departmentMapper.getDepartmentInformation(departmentId);
-        List<DepartmentStaff> departmentStaffs=new ArrayList<>();
-        if ( department.getDepartmentBossName().equals(bossName) && department.getDepartmentBossId()==bossId){
-            departmentStaffs=departmentMapper.getDepartmentStaff(departmentId);
-            List<StaffAttendance> staffAttendanceList=departmentMapper.getStaffAttendance(departmentId);
-            for(int i=0;i<departmentStaffs.size();i++){
-                for(int j=0;j<staffAttendanceList.size();j++){
-                    if(departmentStaffs.get(i).getStaffId().equals(staffAttendanceList.get(j).getUserId())){
-                        if(staffAttendanceList.get(j).status==-1){
-                            departmentStaffs.get(i).setStaffLeaveNum(departmentStaffs.get(i).getStaffLeaveNum()+1);
-                        }else if(staffAttendanceList.get(j).status==0){
-                            departmentStaffs.get(i).setStaffLateNum(departmentStaffs.get(i).getStaffLateNum()+1);
-                        }
-                    }
-                }
-                departmentMapper.updateDepartmentStaff(departmentStaffs.get(i).getStaffId(),departmentStaffs.get(i).getStaffLeaveNum(),departmentStaffs.get(i).getStaffLateNum());
-            }
-        }else {
-            throw new AppException(bossName+"不是该部门老大");
-        }
-    }
-    @Override
-    public List<DepartmentStaff> submitStaffAttendance(String bossName, int bossId,int departmentId){
-        Department department= departmentMapper.getDepartmentInformation(departmentId);
-        List<DepartmentStaff> staffs=new ArrayList<>();
-        if ( department.getDepartmentBossName().equals(bossName) && department.getDepartmentBossId()==bossId){
-            collectStaffAttendance("小明",1,1);
-            staffs=departmentMapper.getDepartmentStaff(departmentId);
-        }else {
-            throw new AppException(bossName+"不是该部门老大");
-        }
-        return staffs;
-    }
+//    @Override
+//    public void collectStaffAttendance(String bossName, int bossId, int departmentId) {
+//        Department department= departmentMapper.getDepartmentInformation(departmentId);
+//        List<DepartmentStaff> departmentStaffs=new ArrayList<>();
+//        if (department.getDepartmentBossId()==bossId){
+//            departmentStaffs=departmentMapper.getDepartmentStaff(departmentId);
+//            List<StaffAttendance> staffAttendanceList=departmentMapper.getStaffAttendance(departmentId);
+//            for(int i=0;i<departmentStaffs.size();i++){
+//                for(int j=0;j<staffAttendanceList.size();j++){
+//                    if(departmentStaffs.get(i).getStaffId().equals(staffAttendanceList.get(j).getUserId())){
+//                        if(staffAttendanceList.get(j).status==-1){
+//                            departmentStaffs.get(i).setStaffLeaveNum(departmentStaffs.get(i).getStaffLeaveNum()+1);
+//                        }else if(staffAttendanceList.get(j).status==0){
+//                            departmentStaffs.get(i).setStaffLateNum(departmentStaffs.get(i).getStaffLateNum()+1);
+//                        }
+//                    }
+//                }
+//                departmentMapper.updateDepartmentStaff(departmentStaffs.get(i).getStaffId(),departmentStaffs.get(i).getStaffLeaveNum(),departmentStaffs.get(i).getStaffLateNum());
+//            }
+//        }else {
+//            throw new AppException(bossName+"不是该部门老大");
+//        }
+//    }
+//    @Override
+//    public List<DepartmentStaff> submitStaffAttendance(String bossName, int bossId,int departmentId){
+//        Department department= departmentMapper.getDepartmentInformation(departmentId);
+//        List<DepartmentStaff> staffs=new ArrayList<>();
+//        if ( department.getDepartmentBossName().equals(bossName) && department.getDepartmentBossId()==bossId){
+//            collectStaffAttendance("小明",1,1);
+//            staffs=departmentMapper.getDepartmentStaff(departmentId);
+//        }else {
+//            throw new AppException(bossName+"不是该部门老大");
+//        }
+//        return staffs;
+//    }
     @Override
     public List<Map<Integer, Map<String,Integer>>> collectUserAttendance(int departmentId){
         List<StaffAttendance> list=departmentMapper.getStaffAttendance(departmentId);

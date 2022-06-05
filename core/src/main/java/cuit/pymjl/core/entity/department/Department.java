@@ -33,10 +33,6 @@ public class Department {
      */
     private Integer departmentNum;
     /**
-     * 部门老大名字
-     */
-    private String departmentBossName;
-    /**
      * 部门老大编号
      */
     private Integer departmentBossId;

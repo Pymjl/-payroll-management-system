@@ -2,6 +2,7 @@ package cuit.pymjl.core.servlet.department;
 
 import cuit.pymjl.core.entity.department.Department;
 import cuit.pymjl.core.entity.department.Staff;
+import cuit.pymjl.core.entity.user.User;
 import cuit.pymjl.core.exception.AppException;
 import cuit.pymjl.core.factory.SingletonFactory;
 import cuit.pymjl.core.service.department.DepartmentService;
@@ -28,11 +29,11 @@ public class CheckStaffInformationServlet extends HttpServlet {
         }
         Department department =new Department();
         department = JsonUtils.toBean(json,Department.class);
-        if(department.getDepartmentBossName()==null||department.getDepartmentBossId()==0||department.getDepartmentId()==0){
+        if(department.getDepartmentBossId()==0||department.getDepartmentId()==0){
             throw new AppException("传参不能为空");
         }
         DepartmentService departmentService = SingletonFactory.getInstance(DepartmentServiceImpl.class);
-        List<Staff> list= departmentService.getStaffInformation(department.getDepartmentBossName(),department.getDepartmentBossId(),department.getDepartmentId());
+        List<User> list= departmentService.getStaffInformation(department.getDepartmentBossId(),department.getDepartmentId());
         response.getWriter().println(JsonUtils.toString(list));
     }
 
