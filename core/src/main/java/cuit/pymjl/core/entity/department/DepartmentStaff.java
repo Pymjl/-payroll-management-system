@@ -41,14 +41,6 @@ public class DepartmentStaff {
      */
     private String staffDepartmentName;
     /**
-     * 员工的早退次数
-     */
-    private Integer staffLeaveNum;
-    /**
-     * 员工的迟到次数
-     */
-    private Integer staffLateNum;
-    /**
      * 创建时间
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT8")

@@ -16,8 +16,6 @@
         <result column="staff_position" property="staffPosition"/>
         <result column="staff_department_id" property="staffDepartmentId"/>
         <result column="staff_department_name" property="staffDepartmentName"/>
-        <result column="staff_leave_num" property="staffLeaveNum"/>
-        <result column="staff_late_num" property="staffLateNum"/>
     </resultMap>
 
     <resultMap id="staffMap" type="cuit.pymjl.core.entity.department.Staff">
