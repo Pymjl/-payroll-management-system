@@ -9,7 +9,7 @@
           <n-button strong secondary round type="info" @click="clockOutEvent">
             签退
           </n-button>
-          <n-button strong secondary round type="info">
+          <n-button strong secondary round type="warning" @click="dayOffEvent">
             请假
           </n-button>
         </n-space>
@@ -19,17 +19,17 @@
       <n-card title="我的出勤状况" size="large" hoverable>
         <n-space justify="space-around" size="large">
           <n-button type="warning">
-            早退：2
+            早退：<span>{{  }}</span>
           </n-button>
           <n-button type="error">
-            缺勤
+            缺勤：<span>{{  }}</span>
           </n-button>
         </n-space>
       </n-card>
     </n-gi>
   </n-grid>
-  <n-space justify="center"><div class="header">考勤情况</div></n-space>
-  
+  <n-space justify="left"><div class="header">考勤情况</div></n-space>
+  <n-button type="primary" round @click="getDayOffNumberEvent">测试</n-button>
 </template>
 
 <script>
@@ -50,11 +50,17 @@ export default defineComponent({
   setup() {
     const {
       clockInEvent,
-      clockOutEvent
+      clockOutEvent,
+      dayOffEvent,
+      getLeaveNumberEvent,
+      getDayOffNumberEvent
     } = useAnalysis();
     return {
       clockInEvent,
-      clockOutEvent
+      clockOutEvent,
+      dayOffEvent,
+      getLeaveNumberEvent,
+      getDayOffNumberEvent
     };
   },
 });
@@ -62,9 +68,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .header {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
-  text-align: center;
   padding: 25px 0 15px 0;
 }
 </style>

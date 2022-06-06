@@ -2,27 +2,55 @@ import { ARFactory } from "../utils/axios";
 
 /**
  * @description: 员工打卡
- * @param {Number} userId
- * @param {Number} departmentId
- * @param {Number} facultyId
  * @returns
  */
- export function clockIn(userId, departmentId, facultyId) {
+ export function clockIn() {
     return ARFactory({
       url: "/employee/clockIn",
-      method: "post",
-      data: { userId, departmentId, facultyId },
+      method: "get",
     });
 }
   
 /**
  * @description: 用户签退
- * @param {Number} data 用户Id
  * @returns
  */
  export function clockOut() {
   return ARFactory({
     url: "/employee/clockOut",
+    method: "get",
+  });
+}
+
+/**
+ * @description: 用户请假
+ * @returns
+ */
+ export function dayOff() {
+  return ARFactory({
+    url: "/employee/dayOff",
+    method: "get",
+  });
+}
+
+/**
+ * @description: 获得员工自己的早退次数
+ * @returns
+ */
+ export function getLeaveNumber() {
+  return ARFactory({
+    url: "/employee/leaveNumber",
+    method: "get",
+  });
+}
+
+/**
+ * @description: 获得员工自己的缺勤次数
+ * @returns
+ */
+ export function getDayOffNumber() {
+  return ARFactory({
+    url: "/employee/dayOffNumber",
     method: "get",
   });
 }

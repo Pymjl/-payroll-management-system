@@ -8,10 +8,8 @@ public interface EmployeeService {
     /**
      * 员工打卡
      * @param userId 用户ID
-     * @param departmentId 部门ID
-     * @param facultyId 系ID
      */
-    void employeeClockIn(Long userId, Long departmentId, Long facultyId);
+    void employeeClockIn(Long userId);
 
     /**
      *员工签退
@@ -33,4 +31,24 @@ public interface EmployeeService {
      * @return int 工作时长
      */
     int getDifferHour(Date startDate, Date endDate);
+
+    /**
+     * 员工请假
+     * @param userId 用户ID
+     */
+    void employeeDayOff(Long userId);
+
+    /**
+     * 查询员工缺勤天数
+     * @param userId 用户ID
+     * @return int 缺勤天数
+     */
+    int getDayOffNumber(Long userId);
+
+    /**
+     * 查询员工早退天数
+     * @param userId 用户ID
+     * @return int 早退天数
+     */
+    int getLeaveNumber(Long userId);
 }

@@ -17,8 +17,8 @@ import java.io.IOException;
  * @author Whisper
  */
 
-@WebServlet(name = "ClockInServlet", value = "/employee/clockIn")
-public class ClockInServlet extends HttpServlet {
+@WebServlet(name = "QueryEmployeeLeaveServlet", value = "/employee/leaveNumber")
+public class QueryEmployeeLeaveServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userId = (String) request.getAttribute("userId");
@@ -26,7 +26,7 @@ public class ClockInServlet extends HttpServlet {
             throw new AppException("发生未知错误，用户ID为空");
         }
         EmployeeService employeeService = SingletonFactory.getInstance(EmployeeServiceImpl.class);
-        employeeService.employeeClockIn(Long.parseLong(userId));
-        response.getWriter().write(R.success());
+        int leaveNumber = employeeService.getLeaveNumber(Long.parseLong(userId));
+        response.getWriter().println(R.success(leaveNumber));
     }
 }

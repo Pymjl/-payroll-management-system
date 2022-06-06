@@ -13,8 +13,8 @@
     </resultMap>
 
     <insert id="addClockIn" parameterType="cuit.pymjl.core.entity.employee.Employee">
-        insert into t_attendance_personal(user_id, department_id, faculty_id, create_time, update_time)
-        values (#{userId}, #{departmentId}, #{facultyId}, now(), now())
+        insert into t_attendance_personal(user_id, department_id, faculty_id, status, create_time, update_time)
+        values (#{userId}, #{departmentId}, #{facultyId}, 1, now(), now())
     </insert>
 
     <update id="upClockOut">
@@ -35,18 +35,23 @@
     <select id="queryPersonalAttendance" resultMap="EmployeeMap">
         select *
         from t_attendance_personal
-        where user_id = #{userID}
+        where user_id = #{userID} and date_format(create_time, '%Y-%m') = date_format(now(), '%Y-%m')
     </select>
 
-    <select id="queryLateNumber" resultType="java.lang.Integer">
+    <select id="queryDayOffNumber" resultType="java.lang.Integer">
         select count(*)
         from t_attendance_personal
-        where user_id = #{userId} and status = 0
+        where user_id = #{userId} and status = 0 and date_format(create_time, '%Y-%m') = date_format(now(), '%Y-%m')
     </select>
 
     <select id="queryLeaveNumber" resultType="java.lang.Integer">
         select count(*)
         from t_attendance_personal
-        where user_id = #{userId} and status = -1
+        where user_id = #{userId} and status = -1 and date_format(create_time, '%Y-%m') = date_format(now(), '%Y-%m')
     </select>
+
+    <insert id="addDayOff">
+        insert into t_attendance_personal(user_id, department_id, faculty_id, working_hours, status, create_time, update_time)
+        values (#{userId}, #{departmentId}, #{facultyId}, 0, 0, now(), now())
+    </insert>
 </mapper>

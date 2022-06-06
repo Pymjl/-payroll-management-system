@@ -6,6 +6,10 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 
+/**
+ * @author Whisper
+ */
+
 public interface EmployeeMapper {
     /**
      * 员工签到
@@ -35,26 +39,22 @@ public interface EmployeeMapper {
                    @Param("status") Integer status);
 
     /**
+     * 员工请假（缺勤）
+     *@param userId 用户id
+     * @param departmentId 部门id
+     * @param facultyId 系id
+     * @return int
+     */
+    int addDayOff(@Param("userId") Long userId,
+                  @Param("departmentId") Long departmentId,
+                  @Param("facultyId") Long facultyId);
+
+    /**
      * 通过用户id查询个人今日考勤
      * @param userId 用户ID
      * @return 考勤信息
      */
     Employee queryTodayAttendance(@Param("userId") Long userId);
-
-    /**
-     * 工作时长计算及工作状态修改
-     * @param userId 用户Id
-     * @param createTime 签到时间
-     * @param updateTime 签退时间
-     * @param hours 工作时长
-     * @param status 工作状态
-     * @return int
-     */
-    int upWorkStatus(@Param("userId") Long userId,
-                     @Param("createTime") Date createTime,
-                     @Param("updateTime") Date updateTime,
-                     @Param("hours") Integer hours,
-                     @Param("status") Integer status);
 
     /**
      * 通过用户id查询个人打卡列表
@@ -68,11 +68,11 @@ public interface EmployeeMapper {
                                            @Param("pageSize") int pageSize);
 
     /**
-     * 统计员工迟到次数
+     * 统计员工缺勤次数
      * @param userId 用户id
      * @return integer
      */
-    Integer queryLateNumber(@Param("userId") Long userId);
+    Integer queryDayOffNumber(@Param("userId") Long userId);
 
     /**
      * 统计员工早退次数
