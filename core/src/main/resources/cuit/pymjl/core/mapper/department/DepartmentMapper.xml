@@ -18,16 +18,6 @@
         <result column="staff_department_name" property="staffDepartmentName"/>
     </resultMap>
 
-    <resultMap id="staffMap" type="cuit.pymjl.core.entity.department.Staff">
-        <id column="id" property="id"/>
-        <result column="staff_id" property="staffId"/>
-        <result column="staff_name" property="staffName"/>
-        <result column="staff_sex" property="staffSex"/>
-        <result column="staff_age" property="staffAge"/>
-        <result column="staff_department_id" property="staffDepartmentId"/>
-        <result column="staff_phone_number" property="staffPhoneNumber"/>
-    </resultMap>
-
     <resultMap id="staffAttendanceMap" type="cuit.pymjl.core.entity.department.StaffAttendance">
         <id column="id" property="id"/>
         <result column="user_id" property="userId"/>
@@ -42,6 +32,21 @@
         <result column="staff_department_name" property="departmentName"/>
         <result column="account" property="account"/>
     </resultMap>
+
+    <resultMap id="staffMap" type="cuit.pymjl.core.entity.department.Staff">
+        <result column="department_id" property="departmentId"/>
+        <result column="faculty_id" property="facultyId"/>
+    </resultMap>
+
+    <select id="getStaff" parameterType="int" resultMap="staffMap">
+        select department_id,faculty_id
+        from t_faculty_details
+        where department_id =(
+            select staff_department_id
+            from t_department_staff
+            where staff_id=#{staffId}
+        )
+    </select>
 
     <select id="getDepartment" parameterType="int" resultMap="departmentMap">
         select department_id,department_name,department_boss_name,department_boss_id,department_num
@@ -59,11 +64,6 @@
     <select id="getDepartmentInformation" parameterType="int" resultMap="departmentMap">
         select *
         from t_department where department_id=#{departmentId}
-    </select>
-
-    <select id="getStaffInformation" resultMap="staffMap">
-        select *
-        from t_staff where staff_department_id=#{staffDepartmentId}
     </select>
 
     <select id="getStaffAttendance" parameterType="int" resultMap="staffAttendanceMap">

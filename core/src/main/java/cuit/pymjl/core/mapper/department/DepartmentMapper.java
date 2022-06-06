@@ -25,15 +25,6 @@ public interface DepartmentMapper {
      */
     Department getDepartmentInformation(int departmentId);
     /**
-    *获取员工的详细信息
-     */
-    /**
-     * 获取员工的详细信息
-     * @param staffDepartmentId  员工所属部门的编号
-     * @return   员工详细信息列表
-     */
-    List<Staff> getStaffInformation(int staffDepartmentId);
-    /**
     *获取员工出勤情况
      */
     /**
@@ -54,4 +45,11 @@ public interface DepartmentMapper {
     List<StaffAttendenceDTO> getAllStaffInformation();
 
     List<StaffAttendance> getStaffAttendanceById(int staffid);
+
+    /**
+     * 员工查询部门id和系id
+     * @param staffId
+     * @return
+     */
+    Staff getStaff(int staffId);
 }

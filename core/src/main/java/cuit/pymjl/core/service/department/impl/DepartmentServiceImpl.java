@@ -151,4 +151,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         return staffAttendenceDTOList;
     }
+
+    @Override
+    public Staff getStaff(int staffId){
+        Staff staff=departmentMapper.getStaff(staffId);
+        return staff;
+    }
 }

@@ -60,4 +60,11 @@ public interface DepartmentService {
      * @return 所需信息的列表
      */
     List<StaffAttendenceDTO> getAllUserInformation();
+
+    /**
+     * 根据员工id查询部门id和系id
+     * @param staffId   员工id
+     * @return
+     */
+    Staff getStaff(int staffId);
 }
