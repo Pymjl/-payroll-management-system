@@ -13,4 +13,9 @@ public interface FinanceService {
      */
     BasicWage queryBasicWage();
 
+    /**
+     * 修改基本工资
+     * @param basicWage 基本工资
+     */
+    void updateBasicWage(BasicWage basicWage);
 }

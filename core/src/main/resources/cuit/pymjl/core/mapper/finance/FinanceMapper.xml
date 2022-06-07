@@ -13,4 +13,14 @@
         select *
         from t_basic_wage
     </select>
+
+    <update id="updateBasicWage">
+        update t_basic_wage
+        <trim prefix="set" suffixOverrides=",">
+            <if test="basicWage.managerWage != null">manager_wage=#{basicWage.managerWage},</if>
+            <if test="basicWage.commonWage != null">common_wage=#{basicWage.commonWage},</if>
+            <if test="basicWage.updateTime != null">update_time=#{basicWage.updateTime}</if>
+        </trim>
+        where id=1
+    </update>
 </mapper>

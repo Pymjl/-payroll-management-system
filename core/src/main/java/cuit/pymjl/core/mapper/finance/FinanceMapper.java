@@ -18,4 +18,11 @@ public interface FinanceMapper {
 
     BasicWage queryBasicWage();
 
+    /**
+     * 更新基本工资
+     * @param basicWage 基本工资
+     * @return int
+     */
+    int updateBasicWage(@Param("basicWage") BasicWage basicWage);
+
 }

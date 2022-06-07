@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * @author Riou
  */
-@WebServlet(name = "QueryBasicWage", value = "/basicWage")
+@WebServlet(name = "QueryBasicWage", value = "/query/basicWage")
 public class QueryBasicWage extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws SecurityException, IOException{
