@@ -20,7 +20,6 @@ import java.io.IOException;
 public class EncodingFilter implements Filter {
     @Override
     public void init(FilterConfig config) throws ServletException {
-        log.info("编码器过滤器初始化......");
         log.info("开始初始化Druid连接池......");
         SqlSession sqlSession = null;
         try {
@@ -39,7 +38,6 @@ public class EncodingFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-        log.info("开始设置编码......");
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
