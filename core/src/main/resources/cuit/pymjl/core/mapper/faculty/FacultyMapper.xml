@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cuit.pymjl.core.mapper.faculty.FacultyMapper">
+    <resultMap id="facultyMap" type="cuit.pymjl.core.entity.faculty.Faculty">
+        <id column="id" property="id"/>
+        <result column="faculty_name" property="facultyName"/>
+        <result column="faculty_head" property="facultyHead"/>
+    </resultMap>
+
+    <resultMap id="facultyDetailsMap" type="cuit.pymjl.core.entity.faculty.FacultyDetails">
+        <id column="id" property="id"/>
+        <result column="faculty_id" property="facultyId"/>
+        <result column="department_id" property="departmentId"/>
+        <result column="department_name" property="departmentName"/>
+        <result column="department_boss_id" property="departmentBossId"/>
+    </resultMap>
+    
+    <insert id="addDepartment" parameterType="cuit.pymjl.core.entity.faculty.FacultyDetails">
+        insert into t_faculty_details(faculty_id, department_id, department_name, department_boss_id)
+        values(#{facultyId}, #{departmentId}, #{departmentName}, #{departmentBossId})
+    </insert>
+
+    <delete id="delDepartment">
+        delete from t_faculty_details
+        where department_id = #{departmentId} and faculty_id = #{facultyId}
+    </delete>
+</mapper>

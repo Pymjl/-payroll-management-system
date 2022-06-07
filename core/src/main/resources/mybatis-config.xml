@@ -51,5 +51,6 @@
         <package name="cuit.pymjl.core.mapper.user"/>
         <package name="cuit.pymjl.core.mapper.finance"/>
         <package name="cuit.pymjl.core.mapper.employee"/>
+        <package name="cuit.pymjl.core.mapper.faculty"/>
     </mappers>
 </configuration>
