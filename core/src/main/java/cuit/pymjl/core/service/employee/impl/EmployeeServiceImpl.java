@@ -1,8 +1,13 @@
 package cuit.pymjl.core.service.employee.impl;
 
+import com.github.pagehelper.Page;
+import cuit.pymjl.core.entity.department.Staff;
 import cuit.pymjl.core.entity.employee.Employee;
 import cuit.pymjl.core.exception.AppException;
+import cuit.pymjl.core.factory.SingletonFactory;
 import cuit.pymjl.core.mapper.employee.EmployeeMapper;
+import cuit.pymjl.core.service.department.DepartmentService;
+import cuit.pymjl.core.service.department.impl.DepartmentServiceImpl;
 import cuit.pymjl.core.service.employee.EmployeeService;
 import cuit.pymjl.core.util.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
@@ -42,10 +47,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         try {
             sqlSession = MybatisUtil.openSession();
             EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
-            //调接口获取部门id，系id
-            int result = employeeMapper.addClockIn(userId, Long.parseLong(String.valueOf(1)), Long.parseLong(String.valueOf(1)));
-            if (result != 1) {
-                throw new AppException("打卡失败");
+            Employee employee = checkTodayAttendance(userId);
+            if (null == employee) {
+                //未签到，插入数据
+                //调接口获取部门id，系id
+                DepartmentService departmentService = SingletonFactory.getInstance(DepartmentServiceImpl.class);
+                int id = Integer.parseInt(String.valueOf(userId));
+                Staff staff = departmentService.getStaff(id);
+                int result = employeeMapper.addClockIn(userId, Long.parseLong(String.valueOf(staff.getDepartmentId())), Long.parseLong(String.valueOf(staff.getFacultyId())));
+                if (result != 1) {
+                    throw new AppException("打卡失败");
+                }
+            }
+            else {
+                //已签到
+                throw new AppException("今日已签到，请勿重复打卡");
             }
         } finally {
             MybatisUtil.close(sqlSession);
@@ -79,13 +95,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         try {
             sqlSession = MybatisUtil.openSession();
             EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
-            //调用接口获取id,暂时使用固定数据1，1
             int result = 0;
             Employee employee = checkTodayAttendance(userId);
-            System.out.println(employee);
             if (null == employee) {
                 //今天还未打卡，请假直接插入数据
-                result = employeeMapper.addDayOff(userId, Long.parseLong(String.valueOf(1)), Long.parseLong(String.valueOf(1)));
+                //调接口获取部门id，系id
+                DepartmentService departmentService = SingletonFactory.getInstance(DepartmentServiceImpl.class);
+                int id = Integer.parseInt(String.valueOf(userId));
+                Staff staff = departmentService.getStaff(id);
+                result = employeeMapper.addDayOff(userId, Long.parseLong(String.valueOf(staff.getDepartmentId())), Long.parseLong(String.valueOf(staff.getFacultyId())));
             }
             else {
                 //今天已打卡修改状态
@@ -139,23 +157,40 @@ public class EmployeeServiceImpl implements EmployeeService {
             sqlSession = MybatisUtil.openSession();
             EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
             Employee employee = checkTodayAttendance(userId);
-            Date time = new Date();
-            Timestamp t = new Timestamp(time.getTime());
-            int hours = getDifferHour(employee.getCreateTime(), t);
-            if (hours >= WORK_HOURS) {
-                employee.setStatus(NORMAL);
+            if (null == employee) {
+                //未签到
+                throw new AppException("签退失败，请先签到");
             }
             else {
-                employee.setStatus(LEAVE_EARLY);
-            }
-            int result = employeeMapper.upClockOut(userId, employee.getCreateTime(), time, hours, employee.getStatus());
-            if (result != 1) {
-                throw new AppException("签退失败");
+                //计算工作时长
+                Date time = new Date();
+                Timestamp t = new Timestamp(time.getTime());
+                int hours = getDifferHour(employee.getCreateTime(), t);
+                if (hours >= WORK_HOURS) {
+                    employee.setStatus(NORMAL);
+                }
+                else {
+                    employee.setStatus(LEAVE_EARLY);
+                }
+                int result = employeeMapper.upClockOut(userId, employee.getCreateTime(), time, hours, employee.getStatus());
+                if (result != 1) {
+                    throw new AppException("签退失败");
+                }
             }
         } finally {
             MybatisUtil.close(sqlSession);
         }
     }
 
-
+    @Override
+    public Page<Employee> queryPersonalAttendance(Long userId, Integer pageNum, Integer pageSize) {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MybatisUtil.openSession();
+            EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
+            return employeeMapper.queryPersonalAttendance(userId, pageNum, pageSize);
+        } finally {
+            MybatisUtil.close(sqlSession);
+        }
+    }
 }

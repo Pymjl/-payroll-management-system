@@ -1,5 +1,6 @@
 package cuit.pymjl.core.service.employee;
 
+import com.github.pagehelper.Page;
 import cuit.pymjl.core.entity.employee.Employee;
 
 import java.util.Date;
@@ -51,4 +52,13 @@ public interface EmployeeService {
      * @return int 早退天数
      */
     int getLeaveNumber(Long userId);
+
+    /**
+     * 查询个人考勤列表
+     * @param userId 用户ID
+     * @param pageNum 页数
+     * @param pageSize 页大小
+     * @return 考勤列表
+     */
+    Page<Employee> queryPersonalAttendance(Long userId, Integer pageNum, Integer pageSize);
 }

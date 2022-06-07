@@ -19,22 +19,25 @@
       <n-card title="我的出勤状况" size="large" hoverable>
         <n-space justify="space-around" size="large">
           <n-button type="warning">
-            早退：<span>{{  }}</span>
+            早退：<span>{{ 0 }}</span>
           </n-button>
           <n-button type="error">
-            缺勤：<span>{{  }}</span>
+            缺勤：<span>{{ 0 }}</span>
           </n-button>
         </n-space>
       </n-card>
     </n-gi>
   </n-grid>
-  <n-space justify="left"><div class="header">考勤情况</div></n-space>
-  <n-button type="primary" round @click="getDayOffNumberEvent">测试</n-button>
+  <!-- <n-button type="primary" round @click="getPersonalAttendanceEvent">方法测试</n-button> -->
+  <n-space justify="left"><div class="header">个人考勤表</div></n-space>
+  <n-data-table :columns="columns" :data="data" />
+  
+
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import { NCard, NGrid, NGi, NButton, NSpace } from "naive-ui";
+import { defineComponent, ref } from "vue";
+import { NCard, NGrid, NGi, NButton, NSpace, NDataTable } from "naive-ui";
 import useAnalysis from "../componables/analysis";
 
 export default defineComponent({
@@ -45,22 +48,28 @@ export default defineComponent({
     NGi,
     NButton,
     NSpace,
+    NDataTable
   },
   props: {},
   setup() {
     const {
+      createColumns,
       clockInEvent,
       clockOutEvent,
       dayOffEvent,
       getLeaveNumberEvent,
-      getDayOffNumberEvent
+      getDayOffNumberEvent,
+      getPersonalAttendanceEvent
     } = useAnalysis();
     return {
+      data: ref([]),
+      columns: createColumns(),
       clockInEvent,
       clockOutEvent,
       dayOffEvent,
       getLeaveNumberEvent,
-      getDayOffNumberEvent
+      getDayOffNumberEvent,
+      getPersonalAttendanceEvent
     };
   },
 });
@@ -68,8 +77,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .header {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 16px;
   padding: 25px 0 15px 0;
 }
 </style>

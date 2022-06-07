@@ -54,3 +54,15 @@ import { ARFactory } from "../utils/axios";
     method: "get",
   });
 }
+
+/**
+ * @description: 获得员工自己的出勤列表
+ * @returns
+ */
+ export function getPersonalAttendance(pageNum, pageSize) {
+  return ARFactory({
+    url: "/employee/attendanceList",
+    method: "get",
+    params: { pageNum, pageSize },
+  });
+}
