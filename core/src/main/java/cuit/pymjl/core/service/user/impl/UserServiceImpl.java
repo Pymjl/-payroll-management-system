@@ -9,6 +9,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.mail.MailUtil;
 import com.github.pagehelper.Page;
 import cuit.pymjl.core.constant.Avatar;
+import cuit.pymjl.core.constant.Gender;
 import cuit.pymjl.core.constant.IdentityEnum;
 import cuit.pymjl.core.constant.MailEnum;
 import cuit.pymjl.core.entity.user.User;
@@ -107,12 +108,19 @@ public class UserServiceImpl implements UserService {
         try {
             log.info("开始验证邮箱验证码......");
             String code = (String) JedisUtils.get(userDTO.getUsername());
-            JedisUtils.del(code);
+            JedisUtils.del(userDTO.getUsername());
             if (StrUtil.isBlank(code) || !code.equals(userDTO.getCode())) {
                 throw new AppException("邮箱验证码错误");
             }
             log.info("邮箱验证码验证成功，开始注册用户.......");
             User user = BeanUtil.copyProperties(userDTO, User.class);
+            if (user.getGender() == null) {
+                user.setGender(Gender.MALE.getGender());
+            } else if (user.getGender() < 0) {
+                user.setGender(Gender.FEMALE.getGender());
+            } else if (user.getGender() > 1) {
+                user.setGender(Gender.MALE.getGender());
+            }
             user.setIdentity(IdentityEnum.USER.getIdentity());
             user.setPassword(PasswordUtils.encrypt(user.getPassword()));
             user.setAvatar(Avatar.DEFAULT.getPath());
