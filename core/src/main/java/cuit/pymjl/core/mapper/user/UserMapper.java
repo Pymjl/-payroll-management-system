@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import cuit.pymjl.core.entity.user.User;
 import cuit.pymjl.core.entity.user.dto.UserDTO;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * @author Pymjl

@@ -3,8 +3,11 @@ package cuit.pymjl.core;
 import com.github.pagehelper.Page;
 import cuit.pymjl.core.entity.user.User;
 import cuit.pymjl.core.entity.user.dto.UserDTO;
+import cuit.pymjl.core.mapper.department.DepartmentMapper;
 import cuit.pymjl.core.mapper.user.UserMapper;
 import cuit.pymjl.core.result.PageResult;
+import cuit.pymjl.core.service.department.DepartmentService;
+import cuit.pymjl.core.service.department.impl.DepartmentServiceImpl;
 import cuit.pymjl.core.util.JsonUtils;
 import cuit.pymjl.core.util.MybatisUtil;
 import org.junit.jupiter.api.Test;
@@ -46,5 +49,12 @@ public class UserMapperTest {
         userDTO.setPhone("19136310161");
         userDTO.setUpdateTime(new Date());
         mapper.updateUserInfo(userDTO, 1L);
+    }
+
+    @Test
+    void test2() {
+        DepartmentService departmentService = new DepartmentServiceImpl();
+        System.out.println(departmentService.getDeptInfoByUserId(1L));
+
     }
 }

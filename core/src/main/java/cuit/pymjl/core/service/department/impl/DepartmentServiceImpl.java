@@ -17,34 +17,35 @@ import java.util.List;
 import java.util.Map;
 
 public class DepartmentServiceImpl implements DepartmentService {
-    SqlSession sqlSession=MybatisUtil.openSession();
-    DepartmentMapper departmentMapper=sqlSession.getMapper(DepartmentMapper.class);
+    SqlSession sqlSession = MybatisUtil.openSession();
+    DepartmentMapper departmentMapper = sqlSession.getMapper(DepartmentMapper.class);
 
     @Override
-    public List<DepartmentStaff> getDepartmentStaff(int bossId,int departmentId) {
-        Department department= departmentMapper.getDepartmentInformation(departmentId);
-        List<DepartmentStaff> departmentStaffs=new ArrayList<>();
-        if (department.getDepartmentBossId()==bossId){
-            departmentStaffs=departmentMapper.getDepartmentStaff(departmentId);
-        }else {
-            throw new AppException("编号为"+bossId+"不是该部门老大");
+    public List<DepartmentStaff> getDepartmentStaff(int bossId, int departmentId) {
+        Department department = departmentMapper.getDepartmentInformation(departmentId);
+        List<DepartmentStaff> departmentStaffs = new ArrayList<>();
+        if (department.getDepartmentBossId() == bossId) {
+            departmentStaffs = departmentMapper.getDepartmentStaff(departmentId);
+        } else {
+            throw new AppException("编号为" + bossId + "不是该部门老大");
         }
         return departmentStaffs;
     }
+
     @Override
-    public List<User> getStaffInformation(int bossId,int departmentId){
-        List<User> userList=new ArrayList<>();
-        DepartmentService departmentService=SingletonFactory.getInstance(DepartmentServiceImpl.class);
-        UserService userService= SingletonFactory.getInstance(UserServiceImpl.class);
-        List<DepartmentStaff> list=departmentService.getDepartmentStaff(bossId,departmentId);
-        for(int i=0;i<list.size();i++){
-            User user=userService.queryUserById(list.get(i).getStaffId().longValue());
+    public List<User> getStaffInformation(int bossId, int departmentId) {
+        List<User> userList = new ArrayList<>();
+        DepartmentService departmentService = SingletonFactory.getInstance(DepartmentServiceImpl.class);
+        UserService userService = SingletonFactory.getInstance(UserServiceImpl.class);
+        List<DepartmentStaff> list = departmentService.getDepartmentStaff(bossId, departmentId);
+        for (int i = 0; i < list.size(); i++) {
+            User user = userService.queryUserById(list.get(i).getStaffId().longValue());
             userList.add(user);
         }
         return userList;
     }
 
-//    @Override
+    //    @Override
 //    public void collectStaffAttendance(String bossName, int bossId, int departmentId) {
 //        Department department= departmentMapper.getDepartmentInformation(departmentId);
 //        List<DepartmentStaff> departmentStaffs=new ArrayList<>();
@@ -80,46 +81,46 @@ public class DepartmentServiceImpl implements DepartmentService {
 //        return staffs;
 //    }
     @Override
-    public List<Map<Integer, Map<String,Integer>>> collectUserAttendance(int departmentId){
-        List<StaffAttendance> list=departmentMapper.getStaffAttendance(departmentId);
-        List<DepartmentStaff> list2=departmentMapper.getDepartmentStaff(departmentId);
-        Map<Integer,Map<String,Integer>> map=new HashMap<Integer,Map<String,Integer>>();
-        int[][] time=new int[list2.size()][2];
-        for(int i=0;i<list2.size();i++){
-            time[i][0]=0;
-            time[i][1]=0;
+    public List<Map<Integer, Map<String, Integer>>> collectUserAttendance(int departmentId) {
+        List<StaffAttendance> list = departmentMapper.getStaffAttendance(departmentId);
+        List<DepartmentStaff> list2 = departmentMapper.getDepartmentStaff(departmentId);
+        Map<Integer, Map<String, Integer>> map = new HashMap<Integer, Map<String, Integer>>();
+        int[][] time = new int[list2.size()][2];
+        for (int i = 0; i < list2.size(); i++) {
+            time[i][0] = 0;
+            time[i][1] = 0;
         }
-        for (int i=0;i<list2.size();i++){
-            for(int j=0;j<list.size();j++){
-                if(list2.get(i).getStaffId().equals(list.get(j).getUserId())){
-                    if(list.get(j).getStatus()==-1){
+        for (int i = 0; i < list2.size(); i++) {
+            for (int j = 0; j < list.size(); j++) {
+                if (list2.get(i).getStaffId().equals(list.get(j).getUserId())) {
+                    if (list.get(j).getStatus() == -1) {
                         time[i][0]++;
-                    }else if(list.get(j).getStatus()==0){
+                    } else if (list.get(j).getStatus() == 0) {
                         time[i][1]++;
                     }
                 }
             }
         }
-        for (int i=0;i<list2.size();i++){
-            Map<String,Integer> map1=new HashMap<>();
-            map1.put("leaveNum",time[i][0]);
-            map1.put("lateNum",time[i][1]);
-            map.put(list2.get(i).getStaffId(),map1);
+        for (int i = 0; i < list2.size(); i++) {
+            Map<String, Integer> map1 = new HashMap<>();
+            map1.put("leaveNum", time[i][0]);
+            map1.put("lateNum", time[i][1]);
+            map.put(list2.get(i).getStaffId(), map1);
         }
-        List<Map<Integer, Map<String,Integer>>> list1=new ArrayList<>();
+        List<Map<Integer, Map<String, Integer>>> list1 = new ArrayList<>();
         list1.add(map);
         return list1;
     }
 
     @Override
-    public List<StaffAttendenceDTO> getUserInformation(int departmentId){
-        UserService userService= SingletonFactory.getInstance(UserServiceImpl.class);
+    public List<StaffAttendenceDTO> getUserInformation(int departmentId) {
+        UserService userService = SingletonFactory.getInstance(UserServiceImpl.class);
         DepartmentService departmentService = SingletonFactory.getInstance(DepartmentServiceImpl.class);
-        List<DepartmentStaff> list=departmentMapper.getDepartmentStaff(departmentId);
-        List<Map<Integer, Map<String,Integer>>> mapList=departmentService.collectUserAttendance(departmentId);
-        List<StaffAttendenceDTO> list1=new ArrayList<>();
-        for(int i=0;i<list.size();i++){
-            StaffAttendenceDTO staffAttendenceDTO=new StaffAttendenceDTO();
+        List<DepartmentStaff> list = departmentMapper.getDepartmentStaff(departmentId);
+        List<Map<Integer, Map<String, Integer>>> mapList = departmentService.collectUserAttendance(departmentId);
+        List<StaffAttendenceDTO> list1 = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            StaffAttendenceDTO staffAttendenceDTO = new StaffAttendenceDTO();
             staffAttendenceDTO.setAvatar(userService.queryUserById(list.get(i).getStaffId().longValue()).getAvatar());
             staffAttendenceDTO.setId(list.get(i).getStaffId().longValue());
             staffAttendenceDTO.setUsername(list.get(i).getStaffName());
@@ -134,15 +135,15 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
     @Override
-    public List<StaffAttendenceDTO> getAllUserInformation(){
-        List<StaffAttendenceDTO> staffAttendenceDTOList=departmentMapper.getAllStaffInformation();
-        for(int i=0;i<staffAttendenceDTOList.size();i++){
-            List<StaffAttendance> staffAttendanceList=departmentMapper.getStaffAttendanceById(staffAttendenceDTOList.get(i).getId().intValue());
-            int leaveNum=0,lateNum=0;
-            for(int j=0;j<staffAttendanceList.size();j++){
-                if(staffAttendanceList.get(j).getStatus()==-1){
+    public List<StaffAttendenceDTO> getAllUserInformation() {
+        List<StaffAttendenceDTO> staffAttendenceDTOList = departmentMapper.getAllStaffInformation();
+        for (int i = 0; i < staffAttendenceDTOList.size(); i++) {
+            List<StaffAttendance> staffAttendanceList = departmentMapper.getStaffAttendanceById(staffAttendenceDTOList.get(i).getId().intValue());
+            int leaveNum = 0, lateNum = 0;
+            for (int j = 0; j < staffAttendanceList.size(); j++) {
+                if (staffAttendanceList.get(j).getStatus() == -1) {
                     leaveNum++;
-                }else if (staffAttendanceList.get(j).getStatus()==0){
+                } else if (staffAttendanceList.get(j).getStatus() == 0) {
                     lateNum++;
                 }
             }
@@ -153,8 +154,19 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Staff getStaff(int staffId){
-        Staff staff=departmentMapper.getStaff(staffId);
+    public Staff getStaff(int staffId) {
+        Staff staff = departmentMapper.getStaff(staffId);
         return staff;
+    }
+
+    @Override
+    public DeptInfo getDeptInfoByUserId(Long userId) {
+        SqlSession sqlSession = MybatisUtil.openSession();
+        try {
+            DepartmentMapper departmentMapper = sqlSession.getMapper(DepartmentMapper.class);
+            return departmentMapper.getDeptAndFacultyInfoByUserId(userId);
+        } finally {
+            MybatisUtil.close(sqlSession);
+        }
     }
 }

@@ -14,13 +14,10 @@ import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.*;
-import javax.servlet.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
- * TODO 有BUG，明天再修复
- *
  * @author Pymjl
  * @version 1.0
  * @date 2022/5/27 0:00
@@ -41,7 +38,7 @@ public class GlobalFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         String uri = req.getRequestURI();
         String method = req.getMethod();
-        if (uri.equals("/login") || uri.equals("/register") || uri.equals("/") ||
+        if (uri.equals("/login") || uri.equals("/register") || uri.equals("/") || uri.equals("/favicon.ico") ||
                 uri.contains("index.jsp") || uri.contains("druid") || uri.equals("/reset/password") ||
                 uri.equals("/code/image") || uri.equals("/code/email") || METHOD.equals(method)) {
             log.info("请求方法为[{}],请求路径为[{}],直接放行", method, uri);

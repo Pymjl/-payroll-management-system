@@ -120,6 +120,5 @@ public class JwtUtils {
         Claims claims = verifyJwt(token);
         Object userId = claims.get("userId");
         System.out.println(claims.get("userId"));
-
     }
 }
