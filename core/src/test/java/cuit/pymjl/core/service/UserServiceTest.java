@@ -43,7 +43,7 @@ public class UserServiceTest {
         User user = new User();
         for (int i = 0; i < 30; i++) {
             user.setAvatar(Avatar.DEFAULT.getPath());
-            user.setUsername("test" + i);
+            user.setUsername("example" + i + "@qq.com");
             user.setPassword(PasswordUtils.encrypt("123456"));
             user.setIdentity(IdentityEnum.USER.getIdentity());
             user.setGender(1);
@@ -55,5 +55,11 @@ public class UserServiceTest {
             user.setUpdateTime(new Date());
             mapper.addUser(user);
         }
+    }
+
+    @Test
+    void testPassword() {
+        String encrypt = PasswordUtils.encrypt("123456");
+        System.out.println(PasswordUtils.match("123456", encrypt));
     }
 }

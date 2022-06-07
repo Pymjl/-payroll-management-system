@@ -55,6 +55,5 @@ public class UserMapperTest {
     void test2() {
         DepartmentService departmentService = new DepartmentServiceImpl();
         System.out.println(departmentService.getDeptInfoByUserId(1L));
-
     }
 }

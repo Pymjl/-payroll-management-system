@@ -9,9 +9,16 @@ import cn.hutool.crypto.SmUtil;
  **/
 public class PasswordUtils {
     /**
+     * 第二次加密的盐
      * 盐,给密码加盐，进行哈希散列加密，加密后的密码不可逆
      */
     private static final String SALT = "%$Pymjl*&123^CUIT.epoch.pymjl*&^%$$";
+
+    /**
+     * 默认盐
+     * 第一次加密
+     */
+    private static final String DEFAULT_SALT = ")yXnWDA+@APdA)yH7i*4*R#I#w$r+bA^F3a%8TU8_&@WN*Xk_j!d(aQVZCWf~sCR";
 
     /**
      * 加密
@@ -20,7 +27,7 @@ public class PasswordUtils {
      * @return {@code String}
      */
     public static String encrypt(String password) {
-        return encrypt(password, SALT);
+        return encrypt(encrypt(password, SALT), DEFAULT_SALT);
     }
 
     /**
@@ -31,7 +38,7 @@ public class PasswordUtils {
      * @return {@code Boolean}
      */
     public static Boolean match(String password, String encryptedPassword) {
-        return match(password, encryptedPassword, SALT);
+        return match(password, encryptedPassword, SALT, DEFAULT_SALT);
     }
 
     /**
@@ -42,12 +49,12 @@ public class PasswordUtils {
      * @param salt              盐
      * @return {@code Boolean}
      */
-    private static Boolean match(String password, String encryptedPassword, String salt) {
+    private static Boolean match(String password, String encryptedPassword, String salt, String defaultSalt) {
         //密码不能为空
         if (null == password || "".equals(password)) {
             throw new RuntimeException("密码为空");
         }
-        return encryptedPassword.equals(encrypt(password, salt));
+        return encryptedPassword.equals(encrypt(encrypt(password, salt), defaultSalt));
     }
 
     /**
