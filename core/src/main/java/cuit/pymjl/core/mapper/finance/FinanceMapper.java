@@ -13,10 +13,9 @@ public interface FinanceMapper {
 
     /**
      * 获取基本工资
-     * @param pageNum 页数
-     * @param pageSize 每页条数
-     * @return {@code Page<BasicWage>}
+     * @return BasicWage
      */
-    Page<BasicWage> queryBasicWage(@Param("pageNum") int pageNum,
-                                    @Param("pageSize") int  pageSize);
+
+    BasicWage queryBasicWage();
+
 }

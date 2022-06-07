@@ -22,9 +22,14 @@ public class BasicWage {
     private Long id;
 
     /**
-     * basicWage 基本工资
+     * commonWage 普通员工基本工资
      */
-    private Integer basicWage;
+    private Integer commonWage;
+
+    /**
+     * managerWage 部门经理基本工资
+     */
+    private Integer managerWage;
 
     /**
      * 创建时间

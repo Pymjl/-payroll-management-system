@@ -8,10 +8,9 @@ import cuit.pymjl.core.entity.finance.BasicWage;
  */
 public interface FinanceService {
     /**
-     * 获取基本工资列表
-     * @param pageNum 页数
-     * @param pageSize 每页条数
-     * @return {@code Page<BasicWage>}
+     * 获取基本工资
+     * @return BasicWage
      */
-    Page<BasicWage> queryBasicWage(Integer pageNum, Integer pageSize);
+    BasicWage queryBasicWage();
+
 }

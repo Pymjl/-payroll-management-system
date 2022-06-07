@@ -3,13 +3,14 @@
 <mapper namespace="cuit.pymjl.core.mapper.finance.FinanceMapper">
     <resultMap id="wageMap" type="cuit.pymjl.core.entity.finance.BasicWage">
         <id property="id" column="id" />
-        <result property="basicWage" column="basic_wage" />
+        <result property="commonWage" column="common_wage" />
+        <result property="managerWage" column="manager_wage" />
         <result property="createTime" column="create_time" />
         <result property="updateTime" column="update_time" />
     </resultMap>
 
     <select id="queryBasicWage" resultMap="wageMap">
-        select id, basic_wage, create_time, update_time
+        select *
         from t_basic_wage
     </select>
 </mapper>
