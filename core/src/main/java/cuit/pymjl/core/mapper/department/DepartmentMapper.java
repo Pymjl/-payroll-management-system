@@ -68,4 +68,13 @@ public interface DepartmentMapper {
      * @return {@code DeptInfo}
      */
     DeptInfo getDeptAndFacultyInfoByUserId(@Param("userId") Long userId);
+
+
+    /**
+     * 查询部门的组长ID
+     *
+     * @param deptName 部门名称
+     * @return {@code Long}
+     */
+    Long selectManager(@Param("deptName") String deptName);
 }

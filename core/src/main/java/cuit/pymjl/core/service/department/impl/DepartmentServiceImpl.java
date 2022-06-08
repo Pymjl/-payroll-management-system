@@ -169,4 +169,16 @@ public class DepartmentServiceImpl implements DepartmentService {
             MybatisUtil.close(sqlSession);
         }
     }
+
+    @Override
+    public Boolean isManager(Long userId, String deptName) {
+        SqlSession sqlSession = MybatisUtil.openSession();
+        try {
+            DepartmentMapper departmentMapper = sqlSession.getMapper(DepartmentMapper.class);
+            Long managerId = departmentMapper.selectManager(deptName);
+            return managerId.equals(userId);
+        } finally {
+            MybatisUtil.close(sqlSession);
+        }
+    }
 }

@@ -117,4 +117,8 @@
         WHERE staff_id = #{userId}
     </select>
 
+    <select id="selectManager" resultType="java.lang.Long">
+        select department_boss_id from t_department where department_name=#{deptName}
+    </select>
+
 </mapper>

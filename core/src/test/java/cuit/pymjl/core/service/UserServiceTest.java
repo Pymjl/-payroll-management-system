@@ -59,7 +59,8 @@ public class UserServiceTest {
 
     @Test
     void testPassword() {
-        String encrypt = PasswordUtils.encrypt("123456");
+        String encrypt = PasswordUtils.encrypt("dasdsad2q4wqdsadsa");
+        System.out.println(encrypt);
         System.out.println(PasswordUtils.match("123456", encrypt));
     }
 }
