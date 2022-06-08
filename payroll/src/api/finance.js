@@ -16,3 +16,19 @@ export function getAllWageSheet(pageNum, pageSize) {
     params: { pageNum, pageSize },
   });
 }
+// 修改基本工资
+export function updateBasicWage(id, commonWage, managerWage) {
+  return ARFactory({
+    url: "/update/basicWage",
+    method: "post",
+    data: { id, commonWage, managerWage },
+  });
+}
+// 根据id获取某个员工的工资条
+export function getWageSheetById(id) {
+  return ARFactory({
+    url: "/admin/getWageSheetById",
+    method: "get",
+    params: { id },
+  });
+}

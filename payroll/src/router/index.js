@@ -8,7 +8,9 @@ const router = createRouter({
       component: () => import("../views/HomePage.vue"),
       meta: {
         requireAuth: true,
+        title: "职工工资管理系统",
       },
+      redirect: "/analysis",
       children: [
         // 首页（数据分析）
         {

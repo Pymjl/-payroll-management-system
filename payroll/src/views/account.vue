@@ -5,28 +5,34 @@
         <n-select
           :style="{ width: '10%' }"
           :options="selectOptions"
-          placeholder="部门"
+          placeholder="职工ID"
         />
-        <n-input :style="{ width: '50%' }" placeholder="根据ID查询" />
-        <n-button type="primary"> 搜索 </n-button>
+        <n-input
+          :style="{ width: '50%' }"
+          placeholder="请输入需要查询的内容..."
+          v-model:value="userId"
+        />
+        <n-button @click="getWageById"> 搜索 </n-button>
+        <n-button type="primary" @click="isShow">工资明细</n-button>
       </n-input-group>
-      <n-button type="info" @click="isShow">工资明细</n-button>
     </n-space>
   </n-card>
   <n-card style="margin-top: 10px">
     <n-h2 align="center">工资条</n-h2>
     <n-data-table
+      remote
       :columns="columns"
       :data="accountData"
       :pagination="pagination"
       :bordered="false"
       :loading="loading"
+      @update-page="updatePage"
     />
   </n-card>
   <!-- 模态框 -->
   <n-modal v-model:show="showModal">
     <n-card
-      style="width: 600px"
+      style="width: 650px"
       title="基本工资"
       :bordered="false"
       size="huge"
@@ -37,7 +43,7 @@
         ref="formRef"
         :model="wage"
         :rules="rules"
-        :size="normal"
+        :size="small"
         label-placement="left"
       >
         <n-grid :cols="24" :x-gap="24">
@@ -49,6 +55,10 @@
           </n-form-item-gi>
         </n-grid>
       </n-form>
+      <n-space justify="flex-end">
+        <n-button type="primary" @click="updateWageEvent">保存</n-button>
+        <n-button style="margin-left: 5px" @click="cancel">取消</n-button>
+      </n-space>
     </n-card>
   </n-modal>
 </template>
@@ -154,8 +164,19 @@ export default defineComponent({
   },
   props: {},
   setup() {
-    const { accountData, loading, pagination, wage, showModal, isShow } =
-      useAccount();
+    const {
+      accountData,
+      loading,
+      pagination,
+      wage,
+      showModal,
+      userId,
+      isShow,
+      updateWageEvent,
+      cancel,
+      updatePage,
+      getWageById,
+    } = useAccount();
     return {
       wage,
       accountData,
@@ -163,7 +184,12 @@ export default defineComponent({
       loading,
       pagination,
       showModal,
+      userId,
       isShow,
+      updateWageEvent,
+      cancel,
+      updatePage,
+      getWageById,
     };
   },
 });

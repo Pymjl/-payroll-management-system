@@ -1,38 +1,33 @@
 import { ref, reactive } from "vue";
-import { getAllWageSheet, getBasicWage } from "@/api/finance";
+import { useMessage } from "naive-ui";
+import {
+  getAllWageSheet,
+  getBasicWage,
+  updateBasicWage,
+  getWageSheetById,
+} from "@/api/finance";
 
 export default () => {
-  const accountData = ref([
-    {
-      employeeId: 1,
-      name: "张三",
-      account: "123456789",
-      basicWage: "6000",
-      bonus: "1000",
-      fine: "0",
-      tax: "60",
-      sumWage: "6940",
-      accountNumber: "123456789",
-      status: 1,
-    },
-  ]);
+  const message = useMessage();
+
+  const accountData = ref([]);
   const loading = ref(false);
   const pagination = reactive({
     page: 1,
-    pageNum: 1,
-    pageSize: 10,
-    pageItem: 0,
+    pageSize: 10, //每页条数
+    pageCount: 0, //总页数
+    itemCount: 0, //总条数
   });
   // 获取基本工资
   const wage = ref({
-    basicWage: "",
+    commonWage: "",
     managerWage: "",
   });
   const getWage = () => {
-    getBasicWage(1, 10)
+    getBasicWage()
       .then(({ res }) => {
-        wage.value = res.records;
-        console.log(wage.value);
+        wage.value.commonWage = res.data.commonWage;
+        wage.value.managerWage = res.data.managerWage;
       })
       .catch((err) => {
         // 更好理解的一种写法->解构err->message
@@ -48,14 +43,50 @@ export default () => {
   const isShow = () => {
     showModal.value = true;
   };
+  // 修改基本工资
+  const updateWageEvent = () => {
+    updateBasicWage(1, wage.value.commonWage, wage.value.managerWage).then(
+      ({ succeed }) => {
+        if (succeed) {
+          message.success("修改成功");
+          getWage();
+          showModal.value = false;
+        }
+      }
+    );
+  };
+  // 取消
+  const cancel = () => {
+    showModal.value = false;
+  };
+
   // 获取所有员工的工资条
   const getAllWage = () => {
-    getAllWageSheet(pagination.pageNum, pagination.pageSize).then(({ res }) => {
+    loading.value = true;
+    getAllWageSheet(pagination.page, pagination.pageSize).then(({ res }) => {
+      loading.value = false;
       accountData.value = res.records;
-      pagination.pageItem = res.total;
+      pagination.itemCount = res.totalElements;
+      console.log(res);
     });
   };
   getAllWage();
+  // 翻页
+  const updatePage = (page) => {
+    pagination.page = page;
+    getAllWage();
+  };
+
+  // 根据id获取某个员工的工资条
+  const userId = ref(null);
+  const getWageById = () => {
+    loading.value = true;
+    getWageSheetById(userId.value).then(({ res }) => {
+      loading.value = false;
+      accountData.value = [res.data];
+      pagination.itemCount = 1;
+    });
+  };
 
   return {
     wage,
@@ -63,6 +94,11 @@ export default () => {
     loading,
     pagination,
     showModal,
+    userId,
     isShow,
+    updateWageEvent,
+    cancel,
+    updatePage,
+    getWageById,
   };
 };
