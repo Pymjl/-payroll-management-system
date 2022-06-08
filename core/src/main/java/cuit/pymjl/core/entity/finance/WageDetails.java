@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Date;
+
 /**
  * @author Riou
  */
@@ -22,7 +24,7 @@ public class WageDetails {
     /**
      * employeeId
      */
-    private Integer employeeId;
+    private Long employeeId;
 
     /**
      * name 职工姓名
@@ -63,7 +65,7 @@ public class WageDetails {
      * createTime 创建时间
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT8")
-    private Data createTime;
+    private Date createTime;
 
     /**
      * status 发放状态

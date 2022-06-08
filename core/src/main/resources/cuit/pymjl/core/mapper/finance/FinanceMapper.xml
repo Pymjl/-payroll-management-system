@@ -9,6 +9,21 @@
         <result property="updateTime" column="update_time" />
     </resultMap>
 
+    <resultMap id="wageSheetMap" type="cuit.pymjl.core.entity.finance.WageDetails">
+        <id property="id" column="id"/>
+        <result property="employeeId" column="employee_id" />
+        <result property="name" column="name"/>
+        <result property="basicWage" column="basic_wage"/>
+        <result property="bonus" column="bonus"/>
+        <result property="fine" column="fine"/>
+        <result property="tax" column="tax"/>
+        <result property="sumWage" column="sum_wage"/>
+        <result property="accountNumber" column="account_number"/>
+        <result property="createTime" column="create_time"/>
+        <result property="status" column="status"/>
+        <result property="departmentName" column="department_name" />
+    </resultMap>
+
     <select id="queryBasicWage" resultMap="wageMap">
         select *
         from t_basic_wage
@@ -23,4 +38,20 @@
         </trim>
         where id=1
     </update>
+
+    <insert id="addWageSheet" parameterType="cuit.pymjl.core.entity.finance.WageDetails">
+        insert into t_wage_details(employee_id, name, basic_wage, bonus, fine, tax, sum_wage, account_number, create_time, status, department_name)
+        values (#{employeeId}, #{name}, #{basicWage}, #{bonus}, #{fine}, #{tax}, #{sumWage}, #{accountNumber}, #{createTime}, #{status}, #{departmentName})
+    </insert>
+
+    <select id="queryAllWageSheet" resultMap="wageSheetMap">
+        select *
+        from t_wage_details
+    </select>
+
+    <select id="queryWageSheetById" resultMap="wageSheetMap">
+        select *
+        from t_wage_details
+        where employee_id=#{id}
+    </select>
 </mapper>
