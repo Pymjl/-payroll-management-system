@@ -9,21 +9,39 @@ import redis.clients.jedis.Jedis;
  * @date 2022/5/25 22:57
  **/
 public class JedisUtils {
-    private static final Jedis CLIENT = RedisDS.create().getJedis();
-
     public static void set(String key, String value) {
-        CLIENT.set(key, value);
+        Jedis jedis = RedisDS.create().getJedis();
+      try {
+          jedis.set(key, value);
+      }finally {
+          jedis.close();
+      }
     }
 
     public static void set(String key, String value, long expire) {
-        CLIENT.setex(key, expire, value);
+        Jedis jedis = RedisDS.create().getJedis();
+        try{
+            jedis.setex(key, expire, value);
+        }finally {
+            jedis.close();
+        }
     }
 
     public static Object get(String key) {
-        return CLIENT.get(key);
+        Jedis jedis = RedisDS.create().getJedis();
+        try {
+           return jedis.get(key);
+        }finally {
+            jedis.close();
+        }
     }
 
     public static void del(String key) {
-        CLIENT.del(key);
+        Jedis jedis = RedisDS.create().getJedis();
+        try {
+            jedis.del(key);
+        }finally {
+            jedis.close();
+        }
     }
 }

@@ -10,11 +10,11 @@ host=106.12.167.1
 # 端口，默认6379
 port=9999
 # 最大空闲连接数, 默认8个
-maxIdle=10
+maxIdle=50
 # 最小空闲连接数, 默认0
-minIdle=0
+minIdle=10
 # 最大连接数, 默认8个
-maxTotal=10
+maxTotal=50
 # 超时，默认2000
 timeout=2000
 # 连接超时，默认timeout
