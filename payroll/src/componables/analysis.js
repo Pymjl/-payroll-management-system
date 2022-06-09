@@ -1,40 +1,29 @@
 import { useMessage } from "naive-ui";
 import { clockIn, clockOut, dayOff, getLeaveNumber, getDayOffNumber, getPersonalAttendance } from "../api/analysis";
+import { ref, toRaw, reactive } from "vue";
+import loading from "naive-ui/es/_internal/loading";
 
 
 export default () => {
   const message = useMessage();
 
-  const createColumns = () => {
-    return [
-      {
-        title: '部门',
-        key: 'department',
-      },
-      {
-        title: '签到时间',
-        key: 'in'
-      },
-      {
-        title: '签退时间',
-        key: 'out'
-      },
-      {
-        title: '工作时长',
-        key: 'hours'
-      },
-      {
-        title: '工作状态',
-        key: 'status'
-      }
-    ]
-  }
+  const leaveNumber = ref(0);
+  const dayOffNumber = ref(0);
+  const accountData = ref([]);
+
+  const pagination = reactive({
+    page: 1,
+    pageSize: 10, //每页条数
+    pageCount: 0, //总页数
+    itemCount: 0, //总条数
+  });
 
   //签到
   const clockInEvent = () => {
-    clockIn(34, 1, 1).then(({ res, succeed }) => {
+    clockIn().then(({ res, succeed }) => {
       if (succeed) {
         message.success("签到成功");
+        getAttendanceEvent();
       } else {
         message.error(res.message);
       }
@@ -52,6 +41,9 @@ export default () => {
     clockOut().then(({ res, succeed }) => {
       if (succeed) {
         message.success("签退成功");
+        getAttendanceEvent();
+        getDayOffEvent();
+        getLeaveEvent();
       } else {
         message.error(res.message);
       }
@@ -81,68 +73,66 @@ export default () => {
       });
   };
 
-  //查询早退次数
-  const getLeaveNumberEvent = () => {
-    getLeaveNumber().then(({ res, succeed }) => {
-      if (succeed) {
-        message.success("查询成功");
-        console.log(res);
-      } else {
-        message.error(res.message);
-      }
+  //查询缺勤情况
+  const getDayOffEvent = () => {
+    getDayOffNumber().then(({ res }) => {
+      dayOffNumber.value = toRaw(res.data);
     })
-      .catch((err) => {
-        const {
-          data: { message: msg },
-        } = err.response;
-        message.error(msg);
-      });
-  };
-  
-  //查询早退次数
-  const getDayOffNumberEvent = () => {
-    getDayOffNumber().then(({ res, succeed }) => {
-      if (succeed) {
-        message.success("查询成功");
-        console.log(res);
-      } else {
-        message.error(res.message);
-      }
-    })
-      .catch((err) => {
-        const {
-          data: { message: msg },
-        } = err.response;
-        message.error(msg);
-      });
-  };
+    .catch((err) => {
+      const {
+        data: { message: msg },
+      } = err.response;
+      console.log(msg);
+    });
+  }
 
-  //查询个人考勤表
-  const getPersonalAttendanceEvent = () => {
-    getPersonalAttendance(1,10).then(({ res, succeed }) => {
-      if (succeed) {
-        message.success("查询成功");
-        console.log(res);
-      } else {
-        message.error(res.message);
-      }
+  //查询早退
+  const getLeaveEvent = () => { 
+    getLeaveNumber().then(({ res }) => {
+      console.log(res.data);
+      leaveNumber.value = toRaw(res.data);
     })
-      .catch((err) => {
-        const {
-          data: { message: msg },
-        } = err.response;
-        message.error(msg);
-      });
-  };
+    .catch((err) => {
+      const {
+        data: { message: msg },
+      } = err.response;
+      console.log(msg);
+    });
+  }
 
+  //查询出勤
+  const getAttendanceEvent = () => { 
+    getPersonalAttendance(pagination.page,pagination.pageSize).then(({ res }) => {
+      loading.value = false;
+      accountData.value = res.records;
+      pagination.itemCount = res.totalElements;
+      console.log(res);
+    })
+    .catch((err) => {
+      const {
+        data: { message: msg },
+      } = err.response;
+      console.log(msg);
+    });
+  }
+
+  // 翻页
+  const pageChangeEvent = (page) => { 
+    pagination.page = page;
+    getAttendanceEvent();
+  }
 
   return {
-    createColumns,
+    leaveNumber,
+    dayOffNumber,
+    accountData,
+    pagination,
     clockInEvent,
     clockOutEvent,
     dayOffEvent,
-    getLeaveNumberEvent,
-    getDayOffNumberEvent,
-    getPersonalAttendanceEvent
+    getDayOffEvent,
+    getLeaveEvent,
+    getAttendanceEvent,
+    pageChangeEvent
   }
 }

@@ -30,11 +30,21 @@ const router = createRouter({
           name: "record",
           component: () => import("../views/record.vue"),
         },
+        {
+          path: "/record/:id",
+          name: "record-detail",
+          component: () => import("../views/detail.vue"),
+        },
         // 员工考勤
         {
           path: "/attendance",
           name: "attendance",
           component: () => import("../views/attendance.vue"),
+        },
+        {
+          path: "/attendance/:id",
+          name: "attendance-detail",
+          component: () => import("../views/checkIn.vue"),
         },
         // 财务部门
         {
@@ -42,6 +52,7 @@ const router = createRouter({
           name: "account",
           component: () => import("../views/account.vue"),
         },
+        
       ],
     },
     // 登录
