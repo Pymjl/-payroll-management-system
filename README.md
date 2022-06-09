@@ -1,11 +1,20 @@
 # payroll-management-system
 
 ## 1.介绍
+
+项目地址：[gitee](https://gitee.com/pymjl_0/payroll-management-system)
+
 JSP课设：学校内部工资管理系统
+
+这是大二JSP课程的课设，考虑到组员欠缺项目的开发经验，技术的积累也不够，所以这次课设我们选用的是原生的Servlet整合了一些其他的诸如Mybatis等常用的框架进行开发
+
+因为最近考试太多，所有人都在忙着期末冲刺，所以这个项目的完成度不高，另外，因为其他组员是第一次进行项目开发,所以很多接口存在潜在的bug以及很多不规范的地方。
+
+但是，这个项目对于刚入门的同学来说依然还是有着一定的学习价值，因为这个项目我设置了异常处理，单例工厂创建类，跨域，拦截器，Druid连接池的使用，Jedis，token，Mybatis等等。我相信很多人都知道如何使用Spring Boot整合这些框架，但是对于原生的可能就不是太了解，即便是我刚开始使用原生的来整合这些框架的时候也是花了一定的时间的，不妨将这个项目作为夯实自己基础的一个学习项目
 
 ## 2.技术栈
 
-前后端分离
+前后端分离，前端使用的Vue+anxious
 
 后端技术栈：打包成war部署到云服务器上
 
@@ -122,7 +131,100 @@ xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.o
 
 ![image-20220524235249441](https://pymjl.oss-cn-shanghai.aliyuncs.com/picgo/image-20220524235249441.png)
 
-### 4.启动项目
+### 
+
+### 4.更改配置文件
+
+#### MySql配置
+
+1. 首先你需要修改数据库的配置信息，先在项目目录中找到`payroll_system.sql`脚本，然后先在数据库里面创建`payroll_system`数据库，然后运行sql脚本
+2. 修改`resource`目录下的`druid.properties`配置文件
+
+![image-20220609213722126](https://pymjl.oss-cn-shanghai.aliyuncs.com/picgo/image-20220609213722126.png)
+
+```properties
+#druid配置文件
+#驱动
+driverClassName=com.mysql.cj.jdbc.Driver
+#url
+url=jdbc:mysql://localhost:3306/payroll_system?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=TRUE
+#用户名
+username=root
+#密码
+password=root
+#连接池初始化大小
+initialSize=10
+#活动链接
+maxActive=20
+#最小连接数
+minIdle=10
+#使用的内置过滤器  若不配置 则不会统计SQL执行
+filters=stat
+#获取连接的最大等待时间，单位为毫秒
+maxWait=60000
+poolPreparedStatements=true
+maxPoolPreparedStatementPerConnectionSize=200
+```
+
+#### Redis配置
+
+修改资源路径下的`redis.settings`配置文件
+
+![image-20220609213859311](https://pymjl.oss-cn-shanghai.aliyuncs.com/picgo/image-20220609213859311.png)
+
+```properties
+#-------------------------------------------------------------------------------
+# Redis客户端配置样例
+# 每一个分组代表一个Redis实例
+# 无分组的Pool配置为所有分组的共用配置，如果分组自己定义Pool配置，则覆盖共用配置
+# 池配置来自于：https://www.cnblogs.com/jklk/p/7095067.html
+#-------------------------------------------------------------------------------
+#----- 默认（公有）配置
+# 地址，默认localhost
+host=localhost
+# 端口，默认6379
+port=6379
+# 最大空闲连接数, 默认8个
+maxIdle=8
+# 最小空闲连接数, 默认0
+minIdle=0
+# 最大连接数, 默认8个
+maxTotal=8
+# 超时，默认2000
+timeout=2000
+# 连接超时，默认timeout
+connectionTimeout=2000
+# 读取超时，默认timeout
+soTimeout=2000
+# 密码，默认无
+password=
+# 数据库序号，默认0
+database=2
+# 客户端名，默认"Hutool"
+clientName=pymjl
+# SSL连接，默认false
+ssl=false;
+```
+
+#### 邮箱配置
+
+修改资源路径下的`mail.settings`
+
+![image-20220609214039431](https://pymjl.oss-cn-shanghai.aliyuncs.com/picgo/image-20220609214039431.png)
+
+```properties
+# 发件人（必须正确，否则发送失败），“小磊”可以任意变更，<>内的地址必须唯一，以下方式也对
+# from = hutool@yeah.net
+from=
+# 密码（注意，某些邮箱需要为SMTP服务单独设置密码，详情查看相关帮助）
+pass=
+# 使用SSL安全连接
+sslEnable=true
+```
+
+### 5.启动项目
+
+#### 后端项目
 
 ![image-20220524235352562](https://pymjl.oss-cn-shanghai.aliyuncs.com/picgo/image-20220524235352562.png)
 
@@ -130,7 +232,33 @@ xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.o
 
 ![image-20220524235416288](https://pymjl.oss-cn-shanghai.aliyuncs.com/picgo/image-20220524235416288.png)
 
-成功！接下来就可以开始愉快的编码了
+成功！
+
+#### 前端
+
+1. 打开idea的控制台，左下角的`Terminal`,进入到前端的根目录
+
+```txt
+cd payroll
+```
+
+2. 拉依赖（确保电脑已配好Vue的环境）
+
+```txt
+npm install
+```
+
+3. 启动服务
+
+```txt
+npm run serve
+```
+
+出现如下界面则成功
+
+![image-20220609214512475](https://pymjl.oss-cn-shanghai.aliyuncs.com/picgo/image-20220609214512475.png)
+
+
 
 ## 5.项目结构
 
