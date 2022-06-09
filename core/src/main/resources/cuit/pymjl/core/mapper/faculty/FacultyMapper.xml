@@ -7,21 +7,32 @@
         <result column="faculty_head" property="facultyHead"/>
     </resultMap>
 
-    <resultMap id="facultyDetailsMap" type="cuit.pymjl.core.entity.faculty.FacultyDetails">
+    <resultMap id="facultyDetailsMap" type="Map">
         <id column="id" property="id"/>
         <result column="faculty_id" property="facultyId"/>
         <result column="department_id" property="departmentId"/>
-        <result column="department_name" property="departmentName"/>
-        <result column="department_boss_id" property="departmentBossId"/>
     </resultMap>
     
     <insert id="addDepartment" parameterType="cuit.pymjl.core.entity.faculty.FacultyDetails">
-        insert into t_faculty_details(faculty_id, department_id, department_name, department_boss_id)
-        values(#{facultyId}, #{departmentId}, #{departmentName}, #{departmentBossId})
+        insert into t_faculty_details(faculty_id, department_id)
+        values(#{facultyId}, #{departmentId})
+    </insert>
+
+    <insert id="addDepartment1" parameterType="cuit.pymjl.core.entity.faculty.FacultyDepartment">
+        insert into t_department(department_id, department_name, department_num, department_boss_id, create_time, update_time)
+        values (#{departmentId}, #{departmentName}, null, #{departmentBossId}, now(), now())
     </insert>
 
     <delete id="delDepartment">
-        delete from t_faculty_details
-        where department_id = #{departmentId} and faculty_id = #{facultyId}
+        delete t_faculty_details,t_department
+        from t_faculty_details,t_department
+        where t_faculty_details.department_id=t_department.department_id AND t_faculty_details.department_id = #{departmentId}
     </delete>
+    
+    <select id="getDepartmentId" resultMap="facultyDetailsMap">
+        select department_id
+        from t_faculty_details
+        where faculty_id = #{facultyId}
+    </select>
+
 </mapper>

@@ -56,15 +56,10 @@
     </select>
 
     <select id="getDepartment" parameterType="int" resultMap="departmentMap">
-        select department_id, department_name, department_boss_name, department_boss_id, department_num
+        select department_id, department_name, department_boss_id, department_num
         from t_department
         where department_id = #{departmentId}
     </select>
-
-    <insert id="addDepartment" parameterType="cuit.pymjl.core.entity.department.Department">
-        insert into t_department(department_id, department_name, department_boss_name)
-        values (#{id}, #{name}, #{boss})
-    </insert>
 
     <select id="getDepartmentStaff" parameterType="int" resultMap="departmentStaffMap">
         select *

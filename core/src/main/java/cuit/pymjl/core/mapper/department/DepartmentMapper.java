@@ -12,7 +12,7 @@ public interface DepartmentMapper {
      * @param departmentId 部门编号
      * @return 部门信息列表
      */
-    List<Department> getDepartment(int departmentId);
+    Department getDepartment(int departmentId);
 
     /**
      * 获取部门员工列表

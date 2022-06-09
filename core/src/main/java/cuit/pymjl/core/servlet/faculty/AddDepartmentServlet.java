@@ -1,6 +1,6 @@
 package cuit.pymjl.core.servlet.faculty;
 
-import cuit.pymjl.core.entity.faculty.FacultyDetails;
+import cuit.pymjl.core.entity.faculty.FacultyDepartment;
 import cuit.pymjl.core.exception.AppException;
 import cuit.pymjl.core.factory.SingletonFactory;
 import cuit.pymjl.core.result.R;
@@ -31,13 +31,15 @@ public class AddDepartmentServlet extends HttpServlet {
             json = json.concat(line);
         }
 
-        FacultyDetails facultyDetails = JsonUtils.toBean(json, FacultyDetails.class);
+        FacultyDepartment facultyDepartment = JsonUtils.toBean(json, FacultyDepartment.class);
         //Objects类的静态方法。主要的作用是提前判断对象是否为空，如果对象为空的话，提前抛出异常。
-        if (Objects.requireNonNull(facultyDetails).getFacultyId() == null || facultyDetails.getDepartmentId() == 0 || facultyDetails.getDepartmentName() == null) {
+        if (Objects.requireNonNull(facultyDepartment).getFacultyId() == null || facultyDepartment.getDepartmentId() == 0 || facultyDepartment.getDepartmentBossId() == 0 || facultyDepartment.getDepartmentName() == null) {
             throw new AppException("参数为空");
         }
         FacultyService facultyService= SingletonFactory.getInstance(FacultyServiceImpl.class);
-        facultyService.addDepartment(facultyDetails);
+        //将新增部门插入到两张表中
+        facultyService.addDepartment(facultyDepartment.getFacultyId(), facultyDepartment.getDepartmentId());
+        facultyService.addDepartment1(facultyDepartment.getDepartmentId(), facultyDepartment.getDepartmentName(), facultyDepartment.getDepartmentBossId());
         response.getWriter().println(R.success());
     }
 }

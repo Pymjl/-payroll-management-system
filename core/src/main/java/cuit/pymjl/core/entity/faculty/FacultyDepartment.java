@@ -1,9 +1,12 @@
 package cuit.pymjl.core.entity.faculty;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.util.Date;
 
 /*添加⼀个构造函数，该构造函数含有所有已声明字段属性参数*/
 @AllArgsConstructor
@@ -13,11 +16,7 @@ import lombok.ToString;
 @Data
 /*需要打印父类的属性,@ToString就是节省了ToString方法*/
 @ToString
-public class FacultyDetails {
-    /**
-     * id.主键自增
-     */
-    private Long id;
+public class FacultyDepartment {
     /**
      * 系id
      */
@@ -26,4 +25,22 @@ public class FacultyDetails {
      * 部门id
      */
     private Integer departmentId;
+    /**
+     * 部门名
+     */
+    private String departmentName;
+    /**
+     * 部门老大id
+     */
+    private int departmentBossId;
+    /**
+     * 创建时间
+     */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT8")
+    private Date createTime;
+    /**
+     * 更新时间
+     */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT8")
+    private Date updateTime;
 }
