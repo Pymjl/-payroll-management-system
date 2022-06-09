@@ -93,5 +93,14 @@ public interface DepartmentService {
      */
     Boolean isManager(Long userId, String deptName);
 
+    /**
+     * 判断用户是否为经理
+     *
+     * @param userId 用户id
+     * @param deptId 部门id
+     * @return {@code Boolean}
+     */
+    Boolean isManager(Long userId, Long deptId);
+
 
 }

@@ -17,4 +17,9 @@ public class DepartmentServiceTest {
     void isManager() {
         System.out.println(departmentService.isManager(1L, "办公室"));
     }
+
+    @Test
+    void test1() {
+        departmentService.getUserInformation(1).forEach(System.out::println);
+    }
 }

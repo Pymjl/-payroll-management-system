@@ -77,4 +77,12 @@ public interface DepartmentMapper {
      * @return {@code Long}
      */
     Long selectManager(@Param("deptName") String deptName);
+
+    /**
+     * 通过部门ID查询组长的ID
+     *
+     * @param deptId 部门id
+     * @return {@code Long}
+     */
+    Long selectManagerById(@Param("deptId") Long deptId);
 }
