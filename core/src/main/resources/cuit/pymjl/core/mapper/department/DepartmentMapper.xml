@@ -7,6 +7,8 @@
         <result column="department_name" property="departmentName"/>
         <result column="department_num" property="departmentNum"/>
         <result column="department_boss_id" property="departmentBossId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
     </resultMap>
 
     <resultMap id="departmentStaffMap" type="cuit.pymjl.core.entity.department.DepartmentStaff">
@@ -56,7 +58,7 @@
     </select>
 
     <select id="getDepartment" parameterType="int" resultMap="departmentMap">
-        select department_id, department_name, department_boss_id, department_num
+        select *
         from t_department
         where department_id = #{departmentId}
     </select>

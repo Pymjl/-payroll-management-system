@@ -35,7 +35,7 @@
     <select id="queryPersonalAttendance" resultMap="EmployeeMap">
         select *
         from t_attendance_personal
-        where user_id = #{userID} and date_format(create_time, '%Y-%m') = date_format(now(), '%Y-%m')
+        where user_id = #{userId} and date_format(create_time, '%Y-%m') = date_format(now(), '%Y-%m')
     </select>
 
     <select id="queryDayOffNumber" resultType="java.lang.Integer">

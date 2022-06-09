@@ -12,7 +12,7 @@
         <result column="faculty_id" property="facultyId"/>
         <result column="department_id" property="departmentId"/>
     </resultMap>
-
+    
     <insert id="addDepartment" parameterType="cuit.pymjl.core.entity.faculty.FacultyDetails">
         insert into t_faculty_details(faculty_id, department_id)
         values(#{facultyId}, #{departmentId})
@@ -28,7 +28,7 @@
         from t_faculty_details,t_department
         where t_faculty_details.department_id=t_department.department_id AND t_faculty_details.department_id = #{departmentId}
     </delete>
-
+    
     <select id="getDepartmentId" resultMap="facultyDetailsMap">
         select department_id
         from t_faculty_details
