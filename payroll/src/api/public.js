@@ -20,3 +20,20 @@ export function getDepartmentList(facultyId) {
     params: { facultyId },
   });
 }
+
+// 管理员获取用户列表
+export function getUsersList(pageNum, pageSize) {
+  return ARFactory({
+    url: "/admin/users",
+    method: "get",
+    params: { pageNum, pageSize },
+  });
+}
+// 管理员删除用户
+export function deleteUser(id) {
+  return ARFactory({
+    url: "/del/user",
+    method: "post",
+    params: { id },
+  });
+}

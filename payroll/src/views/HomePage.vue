@@ -101,6 +101,21 @@ const adminOptions = [
     key: "attendance",
     icon: renderIcon(TimePlot),
   },
+  // 用户管理
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "userManage",
+          },
+        },
+        { default: () => "用户管理" }
+      ),
+    key: "userManage",
+    icon: renderIcon(TimePlot),
+  },
   {
     label: () =>
       h(

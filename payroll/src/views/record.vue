@@ -13,23 +13,28 @@
     :bordered="false"
     :segmented="segmented"
   >
-    <n-form
-    ref="formRef"
-    :model="department"
-    label-placement="left"
-    >
+    <n-form ref="formRef" :model="department" label-placement="left">
       <n-grid :cols="24" :x-gap="22">
         <n-form-item-gi :span="12" label="系ID" path="facultyId">
           <n-input v-model:value="department.facultyId" placeholder="Input" />
         </n-form-item-gi>
         <n-form-item-gi :span="12" label="部门名" path="departmentName">
-          <n-input v-model:value="department.departmentName" placeholder="Input" />
+          <n-input
+            v-model:value="department.departmentName"
+            placeholder="Input"
+          />
         </n-form-item-gi>
         <n-form-item-gi :span="12" label="部门ID" path="departmentId">
-          <n-input v-model:value="department.departmentId" placeholder="Input" />
+          <n-input
+            v-model:value="department.departmentId"
+            placeholder="Input"
+          />
         </n-form-item-gi>
         <n-form-item-gi :span="12" label="部门经理" path="departmentBossId">
-          <n-input v-model:value="department.departmentBossId" placeholder="Input" />
+          <n-input
+            v-model:value="department.departmentBossId"
+            placeholder="Input"
+          />
         </n-form-item-gi>
       </n-grid>
       <n-space justify="right">
@@ -39,13 +44,8 @@
     </n-form>
   </n-modal>
   <n-space vertical :size="12" class="table">
-    <n-data-table
-      :bordered="false"
-      :columns="columns"
-      :data="data"
-    />
+    <n-data-table :bordered="false" :columns="columns" :data="data" />
   </n-space>
-  
 </template>
 
 <script>
@@ -59,9 +59,13 @@ import {
   NInput,
   NFormItemGi,
   NGrid,
-  useMessage
+  useMessage,
 } from "naive-ui";
-import { addDepartment, deleteDepartment, getDepartmentList } from "@/api/employeeFile";
+import {
+  addDepartment,
+  deleteDepartment,
+  getDepartmentList,
+} from "@/api/employeeFile";
 import router from "../router";
 import useEmployee from "../componables/employee";
 import { onMounted } from "vue";
@@ -70,15 +74,12 @@ const department = ref({
   facultyId: null,
   departmentId: null,
   departmentName: "",
-  departmentBossId: null
-})
+  departmentBossId: null,
+});
 
 const message = useMessage();
 
-
-const createColumns = ({
-  checkMore
-}) => {
+const createColumns = ({ checkMore }) => {
   return [
     {
       title: "部门ID",
@@ -105,28 +106,42 @@ const createColumns = ({
       key: "actions",
       align: "center",
       render(row) {
-        return [h(NButton, {
-          size: "small",
-          type: "info",
-          secondary: true,
-          onClick: () => checkMore()
-        }, 
-        { default: () => "查看" }),
-          h(NButton, {
-          style: "margin-left: 6px",
-          size: "small",
-          type: "warning",
-          secondary: true,
-          onClick: () => deleteDepartemntEvent(row)
-        }, { default: () => "删除" })];
-      }
-    }
+        return [
+          h(
+            NButton,
+            {
+              size: "small",
+              type: "info",
+              secondary: true,
+              onClick: () => checkMore(),
+            },
+            { default: () => "查看" }
+          ),
+          h(
+            NButton,
+            {
+              style: "margin-left: 6px",
+              size: "small",
+              type: "warning",
+              secondary: true,
+              onClick: () => deleteDepartemntEvent(row),
+            },
+            { default: () => "删除" }
+          ),
+        ];
+      },
+    },
   ];
 };
 
 //添加部门
 const addDepartmentEvent = () => {
-  addDepartment(department.value.facultyId, department.value.departmentId, department.value.departmentName, department.value.departmentBossId)
+  addDepartment(
+    department.value.facultyId,
+    department.value.departmentId,
+    department.value.departmentName,
+    department.value.departmentBossId
+  )
     .then(({ res, succeed }) => {
       if (succeed) {
         message.success("添加成功");
@@ -135,45 +150,45 @@ const addDepartmentEvent = () => {
         message.error(res.message);
       }
     })
-      .catch((err) => {
-        const {
-          data: { message: msg },
-        } = err.response;
-        console.log(msg);
-      });
-}
+    .catch((err) => {
+      const {
+        data: { message: msg },
+      } = err.response;
+      console.log(msg);
+    });
+};
 //清除表单
 const cancelEvent = () => {
   department.value = {
     facultyId: null,
     departmentId: null,
     departmentName: "",
-    departmentBossId: null
+    departmentBossId: null,
   };
-}
+};
 //删除部门
 const deleteDepartemntEvent = () => {
   deleteDepartment(department.value.departmentId)
-    .then(({ res}) => {
+    .then(({ res }) => {
       message.success("删除成功");
       console.log(res);
     })
-      .catch((err) => {
-        const {
-          data: { message: msg },
-        } = err.response;
-        console.log(msg);
-      });
-}
+    .catch((err) => {
+      const {
+        data: { message: msg },
+      } = err.response;
+      console.log(msg);
+    });
+};
 
 const checkMore = () => {
   router.push({
     path: "/record/",
     query: {
-      departmentBossId: 1
-    }
-  })
-}
+      departmentBossId: 1,
+    },
+  });
+};
 
 export default defineComponent({
   name: "RecordVue",
@@ -185,29 +200,26 @@ export default defineComponent({
     NForm,
     NInput,
     NFormItemGi,
-    NGrid
+    NGrid,
   },
   props: {},
   setup() {
-    const {
-      getEmployeeList,
-      employeeData
-    } = useEmployee();
+    const { getEmployeeList, employeeData } = useEmployee();
     onMounted(() => {
       getDepartmentList();
     });
     return {
       data: employeeData,
       columns: createColumns({
-        checkMore
+        checkMore,
       }),
       // pagination,
       bodyStyle: {
-        width: "600px"
+        width: "600px",
       },
       segmented: {
         content: "soft",
-        footer: "soft"
+        footer: "soft",
       },
       showModal: ref(false),
       department,

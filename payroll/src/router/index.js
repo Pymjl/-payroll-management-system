@@ -52,7 +52,12 @@ const router = createRouter({
           name: "account",
           component: () => import("../views/account.vue"),
         },
-        
+        // 用户管理
+        {
+          path: "/userManage",
+          name: "userManage",
+          component: () => import("../views/userManage.vue"),
+        },
       ],
     },
     // 登录
