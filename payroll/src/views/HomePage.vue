@@ -26,6 +26,7 @@ import {
   Logout,
 } from "@vicons/carbon";
 import ls from "../utils/ls.js";
+import { logout } from "@/api/load.js";
 
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) });
@@ -110,7 +111,9 @@ const adminOptions = [
           },
           onClick: () => {
             ls.clear();
-            window.location.reload();
+            logout().then(() => {
+              window.location.reload();
+            });
           },
         },
         { default: () => "退出登录" }

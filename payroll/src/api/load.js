@@ -53,3 +53,10 @@ export function getUserInfo() {
     method: "get",
   });
 }
+
+export function logout() {
+  return ARFactory({
+    url: "/logout",
+    method: "post",
+  });
+}
