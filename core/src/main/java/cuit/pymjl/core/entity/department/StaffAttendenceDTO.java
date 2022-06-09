@@ -1,5 +1,6 @@
 package cuit.pymjl.core.entity.department;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class StaffAttendenceDTO {
     /**
      * 用户姓名
      */
+    @JsonProperty("nickname")
     private String username;
     /**
      * 部门名称

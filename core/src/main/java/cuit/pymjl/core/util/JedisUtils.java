@@ -11,18 +11,18 @@ import redis.clients.jedis.Jedis;
 public class JedisUtils {
     public static void set(String key, String value) {
         Jedis jedis = RedisDS.create().getJedis();
-      try {
-          jedis.set(key, value);
-      }finally {
-          jedis.close();
-      }
+        try {
+            jedis.set(key, value);
+        } finally {
+            jedis.close();
+        }
     }
 
     public static void set(String key, String value, long expire) {
         Jedis jedis = RedisDS.create().getJedis();
-        try{
+        try {
             jedis.setex(key, expire, value);
-        }finally {
+        } finally {
             jedis.close();
         }
     }
@@ -30,8 +30,8 @@ public class JedisUtils {
     public static Object get(String key) {
         Jedis jedis = RedisDS.create().getJedis();
         try {
-           return jedis.get(key);
-        }finally {
+            return jedis.get(key);
+        } finally {
             jedis.close();
         }
     }
@@ -40,7 +40,7 @@ public class JedisUtils {
         Jedis jedis = RedisDS.create().getJedis();
         try {
             jedis.del(key);
-        }finally {
+        } finally {
             jedis.close();
         }
     }
