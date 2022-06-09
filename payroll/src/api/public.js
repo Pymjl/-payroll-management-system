@@ -5,18 +5,18 @@ export function getDeptRecord(deptId) {
   return ARFactory({
     url: "/department/record",
     method: "get",
-    params: { deptId }
-  })
+    params: { deptId },
+  });
 }
 // 获取部门信息
 /**
  * @description: 获取部门列表
  * @returns
  */
- export function getDepartmentList(facultyId) {
+export function getDepartmentList(facultyId) {
   return ARFactory({
-    url: '/QueryDepartmentInformationServlet',
+    url: "/QueryDepartmentInformationServlet",
     method: "get",
-    params: {facultyId}
+    params: { facultyId },
   });
 }
